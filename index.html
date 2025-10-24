@@ -1,0 +1,2368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameSense.pub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+        }
+
+        body {
+            background: #0f0f0f;
+            color: #d0d0d0;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .container {
+            width: 1300px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* Header */
+        .header {
+            background: #1a1a1a;
+            border-bottom: 1px solid #2a2a2a;
+            padding: 10px 0;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 800;
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-game {
+            color: #ffffff;
+        }
+
+        .logo-sense {
+            color: #00ff00;
+        }
+
+        .nav-main {
+            display: flex;
+            gap: 25px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .nav-main a {
+            color: #b0b0b0;
+            text-decoration: none;
+            padding: 5px 0;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .nav-main a:hover,
+        .nav-main a.active {
+            color: #00ff00;
+            border-bottom-color: #00ff00;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 12px;
+        }
+
+        .premium-badge {
+            background: linear-gradient(45deg, #ff6b00, #ffa500);
+            color: #000;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .free-badge {
+            background: #666;
+            color: #fff;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .admin-badge {
+            background: linear-gradient(45deg, #ff4444, #ff0000);
+            color: #fff;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .logout-btn {
+            background: #333;
+            color: #b0b0b0;
+            padding: 4px 10px;
+            border: 1px solid #444;
+            border-radius: 3px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .logout-btn:hover {
+            background: #444;
+            color: #fff;
+        }
+
+        /* Premium Info */
+        .premium-info {
+            background: #151515;
+            border-bottom: 1px solid #2a2a2a;
+            padding: 10px 0;
+            font-size: 12px;
+        }
+
+        .premium-text {
+            color: #ffa500;
+            font-weight: 600;
+        }
+
+        .discord-link {
+            color: #00ff00;
+            text-decoration: none;
+            margin-left: 15px;
+            font-weight: 600;
+        }
+
+        .discord-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Main Layout */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        /* Sections */
+        .section {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, #252525, #1f1f1f);
+            padding: 12px 20px;
+            border-bottom: 1px solid #2a2a2a;
+            color: #00ff00;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .section-content {
+            padding: 20px;
+        }
+
+        /* Profile */
+        .profile-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .profile-item {
+            background: #252525;
+            padding: 15px;
+            border-radius: 4px;
+            border: 1px solid #333;
+        }
+
+        .profile-label {
+            color: #00ff00;
+            font-weight: 600;
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+
+        .profile-value {
+            color: #d0d0d0;
+            font-size: 13px;
+            word-break: break-all;
+        }
+
+        .hwid-status {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-weight: 700;
+            margin-left: 8px;
+        }
+
+        .hwid-verified {
+            background: #00ff00;
+            color: #000;
+        }
+
+        .hwid-pending {
+            background: #ffa500;
+            color: #000;
+        }
+
+        .hwid-reset {
+            background: #ff4444;
+            color: #fff;
+        }
+
+        .admin-panel {
+            background: linear-gradient(135deg, #333, #222);
+            border: 1px solid #444;
+            border-radius: 6px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .admin-title {
+            color: #ff4444;
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #444;
+            padding-bottom: 8px;
+        }
+
+        .admin-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .admin-btn {
+            background: #444;
+            color: #d0d0d0;
+            padding: 8px 16px;
+            border: 1px solid #555;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .admin-btn:hover {
+            background: #555;
+            border-color: #ff4444;
+        }
+
+        .admin-btn.primary {
+            background: #ff4444;
+            color: #fff;
+        }
+
+        .admin-btn.success {
+            background: #00ff00;
+            color: #000;
+        }
+
+        .key-list {
+            margin-top: 15px;
+        }
+
+        .key-item {
+            background: #1a1a1a;
+            padding: 10px;
+            border: 1px solid #333;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .key-code {
+            color: #00ff00;
+            font-family: 'Consolas', monospace;
+            font-size: 12px;
+        }
+
+        .key-status {
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+
+        .status-active {
+            background: #00ff00;
+            color: #000;
+        }
+
+        .status-used {
+            background: #666;
+            color: #ccc;
+        }
+
+        /* Auth Modals */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            padding: 30px;
+            width: 400px;
+            max-width: 90%;
+        }
+
+        .modal-title {
+            color: #00ff00;
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* Rest of the styles remain the same as previous version */
+        .chat-messages {
+            padding: 15px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-size: 12px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            background: #151515;
+            border-radius: 4px;
+        }
+
+        .chat-message {
+            margin-bottom: 5px;
+            padding: 3px 0;
+        }
+
+        .chat-username {
+            color: #00ff00;
+            font-weight: 700;
+        }
+
+        .chat-time {
+            color: #666;
+            margin-right: 8px;
+        }
+
+        .chat-input-row {
+            padding: 12px 15px;
+            border-top: 1px solid #2a2a2a;
+            display: flex;
+            gap: 10px;
+            background: #1f1f1f;
+        }
+
+        .chat-input {
+            flex-grow: 1;
+            padding: 8px 12px;
+            background: #252525;
+            border: 1px solid #333;
+            border-radius: 4px;
+            color: #d0d0d0;
+            font-size: 12px;
+            font-family: 'Consolas', monospace;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: #00ff00;
+        }
+
+        .chat-send {
+            background: #00ff00;
+            color: #000;
+            padding: 8px 20px;
+            border: none;
+            border-radius: 4px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 12px;
+            transition: background 0.2s;
+        }
+
+        .chat-send:hover {
+            background: #00cc00;
+        }
+
+        .forums-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+
+        .forums-table th {
+            background: #252525;
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #333;
+            color: #00ff00;
+            font-weight: 700;
+        }
+
+        .forums-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #2a2a2a;
+        }
+
+        .forums-table tr:hover {
+            background: #1f1f1f;
+        }
+
+        .forum-name {
+            color: #00ff00;
+            font-weight: 700;
+        }
+
+        .new-posts {
+            color: #00ff00;
+            font-weight: 700;
+            font-size: 11px;
+        }
+
+        .thread {
+            padding: 15px 20px;
+            border-bottom: 1px solid #2a2a2a;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .thread:hover {
+            background: #1f1f1f;
+        }
+
+        .thread:last-child {
+            border-bottom: none;
+        }
+
+        .thread-title {
+            color: #00ff00;
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .thread-meta {
+            font-size: 11px;
+            color: #888;
+        }
+
+        .thread-stats {
+            display: flex;
+            gap: 15px;
+            margin-top: 3px;
+        }
+
+        .stat {
+            color: #666;
+        }
+
+        .post {
+            padding: 25px;
+        }
+
+        .post-header {
+            border-bottom: 1px solid #2a2a2a;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .post-title {
+            color: #00ff00;
+            font-weight: 700;
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .post-meta {
+            font-size: 12px;
+            color: #888;
+        }
+
+        .post-content {
+            font-size: 13px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            color: #c0c0c0;
+        }
+
+        .post-attachments {
+            background: #252525;
+            border: 1px solid #333;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .attachment-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid #333;
+        }
+
+        .attachment-item:last-child {
+            border-bottom: none;
+        }
+
+        .attachment-icon {
+            color: #00ff00;
+            font-size: 16px;
+        }
+
+        .attachment-name {
+            color: #d0d0d0;
+            font-weight: 600;
+        }
+
+        .attachment-download {
+            background: #00ff00;
+            color: #000;
+            padding: 4px 12px;
+            border: none;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-left: auto;
+        }
+
+        .post-actions {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            padding: 15px 0;
+            border-top: 1px solid #2a2a2a;
+            border-bottom: 1px solid #2a2a2a;
+        }
+
+        .post-action {
+            background: #252525;
+            color: #d0d0d0;
+            padding: 8px 16px;
+            border: 1px solid #333;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .post-action:hover {
+            background: #2a2a2a;
+            border-color: #00ff00;
+        }
+
+        .comments-section {
+            margin-top: 25px;
+        }
+
+        .comment {
+            padding: 15px;
+            border-bottom: 1px solid #2a2a2a;
+            background: #1f1f1f;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        .comment:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .comment-author {
+            color: #00ff00;
+            font-weight: 700;
+            font-size: 13px;
+        }
+
+        .comment-meta {
+            font-size: 11px;
+            color: #666;
+        }
+
+        .comment-content {
+            font-size: 12px;
+            line-height: 1.5;
+            color: #c0c0c0;
+        }
+
+        .add-comment {
+            margin-top: 20px;
+            padding: 20px;
+            background: #252525;
+            border-radius: 4px;
+        }
+
+        .comment-input {
+            width: 100%;
+            padding: 12px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 4px;
+            color: #d0d0d0;
+            font-size: 12px;
+            margin-bottom: 12px;
+            height: 80px;
+            resize: vertical;
+        }
+
+        .comment-input:focus {
+            outline: none;
+            border-color: #00ff00;
+        }
+
+        .comment-submit {
+            background: #00ff00;
+            color: #000;
+            padding: 10px 25px;
+            border: none;
+            border-radius: 4px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .create-post {
+            padding: 25px;
+        }
+
+        .post-form input,
+        .post-form textarea {
+            width: 100%;
+            padding: 12px 15px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 4px;
+            color: #d0d0d0;
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+
+        .post-form input:focus,
+        .post-form textarea:focus {
+            outline: none;
+            border-color: #00ff00;
+        }
+
+        .post-form textarea {
+            height: 150px;
+            resize: vertical;
+        }
+
+        .file-attachment {
+            background: #252525;
+            border: 2px dashed #333;
+            border-radius: 4px;
+            padding: 20px;
+            text-align: center;
+            margin: 15px 0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .file-attachment:hover {
+            border-color: #00ff00;
+            background: #2a2a2a;
+        }
+
+        .file-attachment-icon {
+            font-size: 24px;
+            color: #00ff00;
+            margin-bottom: 8px;
+        }
+
+        .file-attachment-text {
+            color: #888;
+            font-size: 12px;
+        }
+
+        .file-list {
+            margin-top: 15px;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            background: #1f1f1f;
+            border: 1px solid #333;
+            border-radius: 4px;
+            margin-bottom: 5px;
+        }
+
+        .file-name {
+            color: #d0d0d0;
+            font-size: 12px;
+        }
+
+        .remove-file {
+            color: #ff4444;
+            cursor: pointer;
+            margin-left: auto;
+            font-weight: 700;
+        }
+
+        .post-submit {
+            background: #00ff00;
+            color: #000;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 4px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 13px;
+            width: 100%;
+            transition: background 0.2s;
+        }
+
+        .post-submit:hover {
+            background: #00cc00;
+        }
+
+        .auth-section {
+            width: 400px;
+            margin: 100px auto;
+        }
+
+        .auth-box {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .logo-auth {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            letter-spacing: -1px;
+        }
+
+        .auth-subtitle {
+            font-size: 14px;
+            color: #888;
+            font-weight: 600;
+        }
+
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 25px;
+            border-bottom: 1px solid #2a2a2a;
+        }
+
+        .auth-tab {
+            padding: 12px 25px;
+            color: #666;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .auth-tab.active {
+            color: #00ff00;
+            border-bottom-color: #00ff00;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #00ff00;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            background: #252525;
+            border: 1px solid #333;
+            border-radius: 4px;
+            color: #d0d0d0;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #00ff00;
+            background: #2a2a2a;
+        }
+
+        .submit-btn {
+            background: #00ff00;
+            color: #000;
+            padding: 14px;
+            border: none;
+            border-radius: 4px;
+            width: 100%;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: background 0.2s;
+        }
+
+        .submit-btn:hover {
+            background: #00cc00;
+        }
+
+        .error-message {
+            color: #ff4444;
+            font-size: 12px;
+            margin-top: 15px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .info-message {
+            background: #252525;
+            border: 1px solid #333;
+            border-radius: 4px;
+            padding: 20px;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 13px;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #666;
+            font-size: 11px;
+        }
+
+        .back-btn {
+            background: #333;
+            color: #b0b0b0;
+            padding: 8px 16px;
+            border: 1px solid #444;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            transition: all 0.2s;
+        }
+
+        .back-btn:hover {
+            background: #444;
+            color: #fff;
+        }
+
+        .online-users {
+            font-size: 12px;
+            color: #888;
+        }
+
+        .online-count {
+            color: #00ff00;
+            font-weight: 700;
+        }
+
+        .todo-list {
+            margin-top: 10px;
+            padding-left: 20px;
+            font-size: 12px;
+        }
+
+        .todo-list li {
+            margin-bottom: 5px;
+            color: #888;
+        }
+
+        .empty-message {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+            padding: 40px 20px;
+        }
+
+        .locked-section {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+        }
+
+        .locked-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .user-list {
+            margin-top: 15px;
+        }
+
+        .user-item {
+            background: #1a1a1a;
+            padding: 12px;
+            border: 1px solid #333;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .user-name {
+            color: #00ff00;
+            font-weight: 600;
+        }
+
+        .user-role {
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 3px;
+            background: #444;
+            color: #ccc;
+        }
+
+        .user-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .delete-btn {
+            background: #ff4444;
+            color: #fff;
+            padding: 4px 8px;
+            border: none;
+            border-radius: 3px;
+            font-size: 10px;
+            cursor: pointer;
+        }
+
+        .reset-btn {
+            background: #ffa500;
+            color: #000;
+            padding: 4px 8px;
+            border: none;
+            border-radius: 3px;
+            font-size: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- Purchase Key Modal -->
+    <div id="purchaseModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-title">Purchase Access Key</div>
+            <div style="text-align: center; margin-bottom: 20px;">
+                <div style="color: #ffa500; font-size: 14px; margin-bottom: 10px;">🔑 Premium Access Required</div>
+                <div style="color: #888; font-size: 12px;">
+                    To access all forum features, you need to purchase an access key.<br>
+                    Price: <strong style="color: #00ff00;">$29.99</strong>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>EMAIL FOR KEY DELIVERY</label>
+                <input type="email" id="purchaseEmail" placeholder="Enter your email for key delivery">
+            </div>
+            
+            <div class="form-group">
+                <label>PAYMENT METHOD</label>
+                <select id="paymentMethod" style="width: 100%; padding: 12px 15px; background: #252525; border: 1px solid #333; border-radius: 4px; color: #d0d0d0;">
+                    <option value="crypto">Bitcoin / Crypto</option>
+                    <option value="paypal">PayPal</option>
+                    <option value="card">Credit Card</option>
+                </select>
+            </div>
+            
+            <button class="submit-btn" onclick="processPayment()" style="background: #ffa500;">PURCHASE KEY</button>
+            <div id="purchaseError" class="error-message" style="margin-top: 15px;"></div>
+        </div>
+    </div>
+
+    <!-- HWID Reset Modal -->
+    <div id="hwidModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-title">HWID Reset Request</div>
+            <div style="text-align: center; margin-bottom: 20px;">
+                <div style="color: #ffa500; font-size: 14px; margin-bottom: 10px;">⚠️ HWID Reset Available</div>
+                <div style="color: #888; font-size: 12px;">
+                    You can reset your HWID binding once every 7 days.<br>
+                    Next reset available: <span id="nextResetDate"></span>
+                </div>
+            </div>
+            <button class="submit-btn" onclick="resetHWID()" id="resetHwidBtn" style="background: #ff4444;">RESET HWID</button>
+            <div id="hwidError" class="error-message" style="margin-top: 15px;"></div>
+        </div>
+    </div>
+
+    <!-- Auth Section -->
+    <div id="authSection" class="auth-section">
+        <div class="auth-box">
+            <div class="auth-header">
+                <div class="logo-auth">
+                    <span class="logo-game">Game</span><span class="logo-sense">Sense</span>
+                </div>
+                <div class="auth-subtitle">Get good. Get GameSense.</div>
+            </div>
+
+            <div class="auth-tabs">
+                <div class="auth-tab active" onclick="showTab('login')">Login</div>
+                <div class="auth-tab" onclick="showTab('register')">Register</div>
+            </div>
+
+            <div id="loginForm">
+                <div class="form-group">
+                    <label>USERNAME</label>
+                    <input type="text" id="loginUsername" placeholder="Enter your username">
+                </div>
+                <div class="form-group">
+                    <label>PASSWORD</label>
+                    <input type="password" id="loginPassword" placeholder="Enter your password">
+                </div>
+                <div class="form-group">
+                    <label>ACCESS KEY</label>
+                    <input type="text" id="loginKey" placeholder="Enter your access key">
+                </div>
+                <button class="submit-btn" onclick="login()">LOGIN</button>
+                <div id="loginError" class="error-message"></div>
+            </div>
+
+            <div id="registerForm" style="display: none;">
+                <div class="form-group">
+                    <label>USERNAME</label>
+                    <input type="text" id="regUsername" placeholder="Choose a username">
+                </div>
+                <div class="form-group">
+                    <label>EMAIL</label>
+                    <input type="email" id="regEmail" placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label>PASSWORD</label>
+                    <input type="password" id="regPassword" placeholder="Create a password">
+                </div>
+                <button class="submit-btn" onclick="register()">REGISTER</button>
+                <div id="regError" class="error-message"></div>
+            </div>
+        </div>
+
+        <div class="info-message">
+            <strong>You do not have permission to view these forums.</strong><br>
+            You are not logged in.
+        </div>
+
+        <div class="footer">
+            GameSense 2025
+        </div>
+    </div>
+
+    <!-- Forum Section -->
+    <div id="forumSection" style="display: none;">
+        <!-- Header -->
+        <div class="header">
+            <div class="container">
+                <div class="header-content">
+                    <a href="#" class="logo" onclick="forum.showSection('index')">
+                        <span class="logo-game">Game</span><span class="logo-sense">Sense</span>
+                    </a>
+                    <nav class="nav-main">
+                        <a href="#" class="active" onclick="forum.showSection('index')">Index</a>
+                        <a href="#" onclick="forum.showSection('threads')" id="threadsLink">Threads</a>
+                        <a href="#" onclick="forum.showSection('create')" id="createLink">Create Post</a>
+                        <a href="#" onclick="forum.showSection('profile')">Profile</a>
+                        <a href="#" onclick="showPurchaseModal()">Purchase Key</a>
+                        <a href="#" onclick="forum.showSection('admin')" id="adminLink" style="display: none;">Admin</a>
+                    </nav>
+                    <div class="user-info" id="userInfo"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Premium Info -->
+        <div class="premium-info" id="premiumInfo" style="display: none;">
+            <div class="container">
+                <span class="premium-text">Logged in as <strong id="currentUser">user</strong></span><br>
+                <span class="premium-text">Premium (Counter-Strike: Global Offensive) until 02-01-2918 21:10:32</span>
+                <a href="#" class="discord-link">Join us on discord</a>
+                <a href="#" class="discord-link">Common issues</a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="container">
+            <div class="main-layout">
+                <!-- Left Column -->
+                <div>
+                    <!-- Locked Content Message -->
+                    <div id="lockedContent" class="section" style="display: none;">
+                        <div class="section-header">🔒 Premium Access Required</div>
+                        <div class="locked-section">
+                            <div class="locked-icon">🔑</div>
+                            <div style="color: #00ff00; font-size: 18px; font-weight: 700; margin-bottom: 15px;">
+                                Purchase Access Key to Unlock All Features
+                            </div>
+                            <div style="color: #888; font-size: 14px; margin-bottom: 30px;">
+                                You need a valid access key to view threads, create posts, and access premium content.
+                            </div>
+                            <button class="submit-btn" onclick="showPurchaseModal()" style="background: #ffa500; width: auto; padding: 12px 30px;">
+                                PURCHASE ACCESS KEY - $29.99
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Index Section -->
+                    <div id="indexSection">
+                        <div class="section">
+                            <div class="section-header">Announcement</div>
+                            <div class="section-content">
+                                As soon as everything is finished, we will probably sell that script.
+                                <br>--- To-do:
+                                <ul class="todo-list">
+                                    <li>fix chat's emoji.</li>
+                                    <li>add discord id reset for users & admin's control panel.</li>
+                                    <li>add hwd reset for users & admin's control panel.</li>
+                                    <li>add download button.</li>
+                                    <li>add api for loaders.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-header">General</div>
+                            <div class="section-content" style="padding: 0;">
+                                <table class="forums-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Forum</th>
+                                            <th>Topics</th>
+                                            <th>Posts</th>
+                                            <th>Last post</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><span class="forum-name">Announcements</span> <span class="new-posts">[ Premium ]</span></td>
+                                            <td id="announcementsCount">0</td>
+                                            <td id="announcementsPosts">0</td>
+                                            <td id="announcementsLast">Locked</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Stay up to date with the latest news</td>
+                                            <td id="newsCount">0</td>
+                                            <td id="newsPosts">0</td>
+                                            <td id="newsLast">Locked</td>
+                                        </tr>
+                                        <tr>
+                                            <td><span class="forum-name">General talk</span> <span class="new-posts">[ Premium ]</span></td>
+                                            <td id="generalCount">0</td>
+                                            <td id="generalPosts">0</td>
+                                            <td id="generalLast">Locked</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Threads Section -->
+                    <div id="threadsSection" style="display: none;">
+                        <div class="section">
+                            <div class="section-header">Threads</div>
+                            <div class="section-content" style="padding: 0;">
+                                <div id="threadsContainer"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Create Post Section -->
+                    <div id="createSection" style="display: none;">
+                        <button class="back-btn" onclick="forum.showSection('threads')">← Back to Threads</button>
+                        <div class="section">
+                            <div class="section-header">Create Post</div>
+                            <div class="create-post">
+                                <form class="post-form" onsubmit="forum.createPost(event)">
+                                    <input type="text" id="postTitle" placeholder="Post Title" required>
+                                    <textarea id="postContent" placeholder="Post Content" required></textarea>
+                                    
+                                    <div class="file-attachment" onclick="document.getElementById('fileInput').click()">
+                                        <div class="file-attachment-icon">📎</div>
+                                        <div class="file-attachment-text">Click to attach files or drag & drop</div>
+                                        <input type="file" id="fileInput" multiple style="display: none;" onchange="forum.handleFileSelect(event)">
+                                    </div>
+                                    <div id="fileList" class="file-list"></div>
+                                    
+                                    <button type="submit" class="post-submit">CREATE POST</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Profile Section -->
+                    <div id="profileSection" style="display: none;">
+                        <div class="section">
+                            <div class="section-header">Profile</div>
+                            <div class="section-content">
+                                <div class="profile-info">
+                                    <div class="profile-item">
+                                        <div class="profile-label">Username</div>
+                                        <div class="profile-value" id="profileUsername"></div>
+                                    </div>
+                                    <div class="profile-item">
+                                        <div class="profile-label">Status</div>
+                                        <div class="profile-value">
+                                            <span id="profileStatus"></span>
+                                            <span class="hwid-status" id="statusBadge">FREE</span>
+                                        </div>
+                                    </div>
+                                    <div class="profile-item">
+                                        <div class="profile-label">Access Key</div>
+                                        <div class="profile-value" id="profileKey">Not purchased</div>
+                                    </div>
+                                    <div class="profile-item">
+                                        <div class="profile-label">Email</div>
+                                        <div class="profile-value" id="profileEmail"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Purchase Section -->
+                                <div class="twofa-section" id="purchaseSection">
+                                    <div class="twofa-title">🔑 Premium Access</div>
+                                    <div style="margin-bottom: 15px;">
+                                        <div style="color: #d0d0d0; font-size: 12px; margin-bottom: 8px;">
+                                            Current Status: <span id="currentStatus" style="color: #ff4444;">FREE USER</span>
+                                        </div>
+                                        <div style="color: #888; font-size: 11px;">
+                                            Purchase an access key to unlock all forum features including threads, posts, and premium content.
+                                        </div>
+                                    </div>
+                                    <button class="admin-btn" onclick="showPurchaseModal()" style="background: #ffa500;">Purchase Key - $29.99</button>
+                                </div>
+
+                                <!-- Key Management (for premium users) -->
+                                <div class="twofa-section" id="keyManagement" style="display: none;">
+                                    <div class="twofa-title">🔑 Access Key</div>
+                                    <div style="margin-bottom: 15px;">
+                                        <div style="color: #00ff00; font-size: 12px; margin-bottom: 8px;">
+                                            Your Access Key: <span id="userAccessKey" style="font-family: 'Consolas', monospace;"></span>
+                                        </div>
+                                        <div style="color: #888; font-size: 11px;">
+                                            Premium access active. All features unlocked.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- HWID Reset Section -->
+                                <div class="twofa-section">
+                                    <div class="twofa-title">HWID Management</div>
+                                    <div style="margin-bottom: 15px;">
+                                        <div style="color: #d0d0d0; font-size: 12px; margin-bottom: 8px;">
+                                            Current HWID: <span id="currentHwid" style="color: #00ff00; font-family: 'Consolas', monospace;"></span>
+                                        </div>
+                                        <div style="color: #888; font-size: 11px;">
+                                            Your account is bound to this hardware configuration. 
+                                            If you change devices, you'll need to reset your HWID.
+                                        </div>
+                                    </div>
+                                    <button class="admin-btn" onclick="showHwidResetModal()">Reset HWID</button>
+                                    <div style="color: #ffa500; font-size: 11px; margin-top: 10px;">
+                                        ⚠️ HWID reset available once every 7 days
+                                    </div>
+                                </div>
+
+                                <!-- Admin Panel -->
+                                <div id="adminPanel" class="admin-panel" style="display: none;">
+                                    <div class="admin-title">Administrator Panel</div>
+                                    <div class="admin-actions">
+                                        <button class="admin-btn primary" onclick="generateAccessKey()">Generate Access Key</button>
+                                        <button class="admin-btn success" onclick="viewAllUsers()">View All Users</button>
+                                        <button class="admin-btn" onclick="systemStats()">System Stats</button>
+                                        <button class="admin-btn" onclick="deleteAllPosts()" style="background: #ff4444;">Delete All Posts</button>
+                                    </div>
+                                    <div id="adminOutput" class="key-list"></div>
+                                    <div id="usersList" class="user-list"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Admin Section -->
+                    <div id="adminSection" style="display: none;">
+                        <div class="section">
+                            <div class="section-header">Admin Panel</div>
+                            <div class="section-content">
+                                <div class="admin-actions">
+                                    <button class="admin-btn primary" onclick="generateAccessKey()">Generate Access Key</button>
+                                    <button class="admin-btn success" onclick="viewAllUsers()">Manage Users</button>
+                                    <button class="admin-btn" onclick="managePosts()">Manage Posts</button>
+                                    <button class="admin-btn" onclick="systemStats()" style="background: #00ff00; color: #000;">System Stats</button>
+                                </div>
+                                
+                                <div id="adminContent">
+                                    <div class="empty-message">Select an action from above</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Single Post Section -->
+                    <div id="postSection" style="display: none;">
+                        <button class="back-btn" onclick="forum.showSection('threads')">← Back to Threads</button>
+                        <div class="section">
+                            <div id="postContainer"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column -->
+                <div>
+                    <div class="section">
+                        <div class="section-header">Chat</div>
+                        <div class="chat-messages" id="chatMessages">
+                            <div class="empty-message">Purchase access key to join chat</div>
+                        </div>
+                        <div class="chat-input-row">
+                            <input type="text" class="chat-input" id="chatInput" placeholder="Purchase key to chat..." disabled>
+                            <button class="chat-send" onclick="sendMessage()" disabled>Send</button>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <div class="section-header">Online Users</div>
+                        <div class="section-content">
+                            <div class="online-users" id="onlineUsers">
+                                <span class="online-count">0 users online</span><br>
+                                <div id="onlineList"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // GameSense System with Full Admin Rights
+        class GameSenseForum {
+            constructor() {
+                this.users = JSON.parse(localStorage.getItem('gs_users')) || {
+                    'Monax': {
+                        password: 'Kzrhdf1992A_',
+                        email: 'admin@gamesense.com',
+                        role: 'admin',
+                        hasKey: true,
+                        accessKey: 'HWID-TE32-SWK2',
+                        premiumUntil: '02-01-2918 21:10:32',
+                        hwid: 'HWID_TE32_SWK2',
+                        lastHwidReset: null
+                    }
+                };
+                
+                this.accessKeys = JSON.parse(localStorage.getItem('gs_keys')) || {};
+                this.posts = JSON.parse(localStorage.getItem('gs_posts')) || [];
+                this.chatMessages = JSON.parse(localStorage.getItem('gs_chat')) || [];
+                this.onlineUsers = JSON.parse(localStorage.getItem('gs_online')) || {};
+                
+                this.currentUser = localStorage.getItem('gs_currentUser') || '';
+                this.currentHwid = this.generateHWID();
+                this.attachedFiles = [];
+            }
+
+            // HWID System
+            generateHWID() {
+                const components = [
+                    navigator.userAgent,
+                    navigator.platform,
+                    navigator.hardwareConcurrency || 'unknown',
+                    screen.width + 'x' + screen.height,
+                    navigator.language,
+                    new Date().getTimezoneOffset()
+                ];
+                
+                let hwid = '';
+                for (let comp of components) {
+                    let hash = 0;
+                    for (let i = 0; i < comp.length; i++) {
+                        hash = ((hash << 5) - hash) + comp.charCodeAt(i);
+                        hash = hash & hash;
+                    }
+                    hwid += Math.abs(hash).toString(36).substr(0, 4);
+                }
+                
+                return 'HWID_' + hwid.toUpperCase();
+            }
+
+            validateHWID(username) {
+                const user = this.users[username];
+                if (!user) return false;
+                
+                if (!user.hwid) {
+                    user.hwid = this.currentHwid;
+                    this.saveData();
+                    return true;
+                }
+                
+                return user.hwid === this.currentHwid;
+            }
+
+            canResetHWID(username) {
+                const user = this.users[username];
+                if (!user || !user.lastHwidReset) return true;
+                
+                const lastReset = new Date(user.lastHwidReset);
+                const now = new Date();
+                const daysSinceReset = (now - lastReset) / (1000 * 60 * 60 * 24);
+                
+                return daysSinceReset >= 7;
+            }
+
+            resetHWID(username) {
+                const user = this.users[username];
+                if (!user) return false;
+                
+                if (!this.canResetHWID(username)) {
+                    return { success: false, message: 'HWID reset available once every 7 days' };
+                }
+                
+                user.hwid = this.currentHwid;
+                user.lastHwidReset = new Date().toISOString();
+                this.saveData();
+                
+                return { success: true, message: 'HWID reset successfully' };
+            }
+
+            // НОВАЯ РЕГИСТРАЦИЯ БЕЗ КЛЮЧА
+            registerUser(username, email, password) {
+                if (this.users[username]) {
+                    return { success: false, message: 'Username already exists!' };
+                }
+
+                this.users[username] = { 
+                    password: password,
+                    email: email,
+                    role: 'user',
+                    hasKey: false,
+                    accessKey: null,
+                    premiumUntil: null,
+                    hwid: this.currentHwid,
+                    lastHwidReset: null,
+                    registeredAt: new Date().toISOString()
+                };
+                
+                this.saveData();
+                return { success: true, message: 'Registration successful!' };
+            }
+
+            // ПОКУПКА КЛЮЧА
+            purchaseKey(username, email, paymentMethod) {
+                const user = this.users[username];
+                if (!user) return { success: false, message: 'User not found' };
+                
+                if (user.hasKey) {
+                    return { success: false, message: 'User already has access key' };
+                }
+
+                // Генерируем ключ
+                const key = 'GS_' + Math.random().toString(36).substr(2, 8).toUpperCase() + '_' + 
+                           Math.random().toString(36).substr(2, 4).toUpperCase();
+                
+                // Обновляем пользователя
+                user.hasKey = true;
+                user.accessKey = key;
+                user.premiumUntil = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toLocaleDateString();
+                
+                // Сохраняем ключ
+                this.accessKeys[key] = {
+                    owner: username,
+                    purchasedAt: new Date().toISOString(),
+                    paymentMethod: paymentMethod,
+                    email: email
+                };
+
+                // Симулируем отправку ключа на почту
+                console.log(`📧 ACCESS KEY SENT TO: ${email}`);
+                console.log(`📧 KEY: ${key}`);
+                alert(`Access key purchased!\n\nKey: ${key}\n\nThis key has been sent to: ${email}`);
+                
+                this.saveData();
+                return { success: true, key: key, message: 'Access key purchased successfully!' };
+            }
+
+            // АВТОРИЗАЦИЯ С КЛЮЧОМ
+            loginUser(username, password, key) {
+                const user = this.users[username];
+                if (!user || user.password !== password) {
+                    return { success: false, message: 'Invalid credentials!' };
+                }
+
+                // Проверяем HWID
+                if (!this.validateHWID(username)) {
+                    return { success: false, message: 'HWID mismatch! This account is bound to different hardware.' };
+                }
+
+                // Проверяем ключ для не-админов
+                if (user.role !== 'admin' && user.accessKey !== key) {
+                    return { success: false, message: 'Invalid access key!' };
+                }
+
+                return { 
+                    success: true, 
+                    user: user
+                };
+            }
+
+            // АДМИН ФУНКЦИИ
+            deleteUser(username) {
+                if (username === 'Monax') {
+                    return { success: false, message: 'Cannot delete admin account!' };
+                }
+                
+                delete this.users[username];
+                this.saveData();
+                return { success: true, message: `User ${username} deleted successfully!` };
+            }
+
+            resetUserHWID(username) {
+                const user = this.users[username];
+                if (!user) return { success: false, message: 'User not found' };
+                
+                user.hwid = null;
+                user.lastHwidReset = null;
+                this.saveData();
+                return { success: true, message: `HWID reset for user ${username}!` };
+            }
+
+            deletePost(postId) {
+                this.posts = this.posts.filter(post => post.id !== postId);
+                this.saveData();
+                return { success: true, message: 'Post deleted successfully!' };
+            }
+
+            deleteAllPosts() {
+                this.posts = [];
+                this.saveData();
+                return { success: true, message: 'All posts deleted successfully!' };
+            }
+
+            // ОСТАЛЬНЫЕ МЕТОДЫ
+            saveData() {
+                localStorage.setItem('gs_users', JSON.stringify(this.users));
+                localStorage.setItem('gs_keys', JSON.stringify(this.accessKeys));
+                localStorage.setItem('gs_posts', JSON.stringify(this.posts));
+                localStorage.setItem('gs_chat', JSON.stringify(this.chatMessages));
+                localStorage.setItem('gs_online', JSON.stringify(this.onlineUsers));
+                localStorage.setItem('gs_currentUser', this.currentUser);
+            }
+
+            updateUIForUser(user) {
+                const hasKey = user.hasKey || user.role === 'admin';
+                const isAdmin = user.role === 'admin';
+                
+                // Показываем/скрываем элементы
+                document.getElementById('premiumInfo').style.display = hasKey ? 'block' : 'none';
+                document.getElementById('lockedContent').style.display = hasKey ? 'none' : 'block';
+                document.getElementById('purchaseSection').style.display = (hasKey || isAdmin) ? 'none' : 'block';
+                document.getElementById('keyManagement').style.display = (hasKey && !isAdmin) ? 'block' : 'none';
+                document.getElementById('adminPanel').style.display = isAdmin ? 'block' : 'none';
+                document.getElementById('adminLink').style.display = isAdmin ? 'inline' : 'none';
+                
+                // Обновляем навигацию
+                document.getElementById('threadsLink').style.display = hasKey ? 'inline' : 'none';
+                document.getElementById('createLink').style.display = hasKey ? 'inline' : 'none';
+                
+                if (hasKey) {
+                    if (isAdmin) {
+                        document.getElementById('statusBadge').className = 'hwid-status hwid-verified';
+                        document.getElementById('statusBadge').textContent = 'ADMIN';
+                        document.getElementById('currentStatus').textContent = 'ADMIN USER';
+                        document.getElementById('currentStatus').style.color = '#ff4444';
+                        document.getElementById('profileKey').textContent = 'ADMIN KEY';
+                    } else {
+                        document.getElementById('userAccessKey').textContent = user.accessKey;
+                        document.getElementById('statusBadge').className = 'hwid-status hwid-verified';
+                        document.getElementById('statusBadge').textContent = 'PREMIUM';
+                        document.getElementById('currentStatus').textContent = 'PREMIUM USER';
+                        document.getElementById('currentStatus').style.color = '#00ff00';
+                        document.getElementById('profileKey').textContent = user.accessKey;
+                    }
+                    
+                    // Разблокируем чат
+                    document.getElementById('chatInput').disabled = false;
+                    document.getElementById('chatInput').placeholder = 'Type a message...';
+                    document.querySelector('.chat-send').disabled = false;
+                } else {
+                    document.getElementById('statusBadge').className = 'hwid-status hwid-reset';
+                    document.getElementById('statusBadge').textContent = 'FREE';
+                    document.getElementById('currentStatus').textContent = 'FREE USER';
+                    document.getElementById('currentStatus').style.color = '#ff4444';
+                    document.getElementById('profileKey').textContent = 'Not purchased';
+                    
+                    // Блокируем чат
+                    document.getElementById('chatInput').disabled = true;
+                    document.querySelector('.chat-send').disabled = true;
+                }
+            }
+
+            showForum(username) {
+                this.currentUser = username;
+                const user = this.users[username];
+                
+                this.saveData();
+                
+                document.getElementById('authSection').style.display = 'none';
+                document.getElementById('forumSection').style.display = 'block';
+
+                let badge = '';
+                if (user.role === 'admin') {
+                    badge = '<div class="admin-badge">Admin</div>';
+                } else if (user.hasKey) {
+                    badge = '<div class="premium-badge">Premium</div>';
+                } else {
+                    badge = '<div class="free-badge">Free</div>';
+                }
+
+                document.getElementById('userInfo').innerHTML = `
+                    <span>${username}</span>
+                    ${badge}
+                    <button class="logout-btn" onclick="forum.logout()">Logout</button>
+                `;
+
+                document.getElementById('currentUser').textContent = username;
+                this.updateUIForUser(user);
+                this.loadProfile();
+                
+                // Загружаем контент если есть ключ или админ
+                if (user.hasKey || user.role === 'admin') {
+                    this.loadThreads();
+                    this.loadChatMessages();
+                    this.updateForumStats();
+                }
+            }
+
+            loadProfile() {
+                const user = this.users[this.currentUser];
+                if (!user) return;
+                
+                document.getElementById('profileUsername').textContent = this.currentUser;
+                document.getElementById('profileEmail').textContent = user.email;
+                document.getElementById('profileStatus').textContent = user.role === 'admin' ? 'Admin' : (user.hasKey ? 'Premium' : 'Free');
+                document.getElementById('currentHwid').textContent = user.hwid || 'Not set';
+                
+                this.updateUIForUser(user);
+                this.updateHwidResetStatus();
+            }
+
+            updateHwidResetStatus() {
+                const user = this.users[this.currentUser];
+                if (!user) return;
+                
+                const canReset = this.canResetHWID(this.currentUser);
+                const resetBtn = document.getElementById('resetHwidBtn');
+                
+                if (canReset) {
+                    resetBtn.disabled = false;
+                    resetBtn.style.background = '#ff4444';
+                    resetBtn.textContent = 'RESET HWID';
+                    document.getElementById('nextResetDate').textContent = 'Available now';
+                } else {
+                    resetBtn.disabled = true;
+                    resetBtn.style.background = '#666';
+                    resetBtn.textContent = 'RESET COOLDOWN';
+                    
+                    const nextReset = new Date(user.lastHwidReset);
+                    nextReset.setDate(nextReset.getDate() + 7);
+                    document.getElementById('nextResetDate').textContent = nextReset.toLocaleDateString();
+                }
+            }
+
+            showSection(section) {
+                const user = this.users[this.currentUser];
+                const hasAccess = user.hasKey || user.role === 'admin';
+                
+                if (!hasAccess && (section === 'threads' || section === 'create' || section === 'admin')) {
+                    this.showSection('profile');
+                    alert('Purchase access key to unlock this feature!');
+                    return;
+                }
+
+                // Если не админ пытается зайти в админку
+                if (section === 'admin' && user.role !== 'admin') {
+                    this.showSection('profile');
+                    alert('Admin access required!');
+                    return;
+                }
+
+                document.querySelectorAll('.nav-main a').forEach(a => a.classList.remove('active'));
+                
+                document.getElementById('indexSection').style.display = 'none';
+                document.getElementById('threadsSection').style.display = 'none';
+                document.getElementById('createSection').style.display = 'none';
+                document.getElementById('profileSection').style.display = 'none';
+                document.getElementById('postSection').style.display = 'none';
+                document.getElementById('adminSection').style.display = 'none';
+                document.getElementById('lockedContent').style.display = 'none';
+                
+                document.getElementById(section + 'Section').style.display = 'block';
+                
+                // Активируем кнопку в навигации
+                const navLink = document.querySelector(`.nav-main a[onclick*="${section}"]`);
+                if (navLink) {
+                    navLink.classList.add('active');
+                }
+                
+                if (section === 'threads') {
+                    this.loadThreads();
+                } else if (section === 'profile') {
+                    this.loadProfile();
+                } else if (section === 'admin') {
+                    this.loadAdminPanel();
+                }
+            }
+
+            loadAdminPanel() {
+                const adminContent = document.getElementById('adminContent');
+                adminContent.innerHTML = `
+                    <div class="admin-panel">
+                        <div class="admin-title">Administrator Controls</div>
+                        <div class="admin-actions">
+                            <button class="admin-btn primary" onclick="generateAccessKey()">Generate Access Key</button>
+                            <button class="admin-btn success" onclick="viewAllUsers()">Manage Users</button>
+                            <button class="admin-btn" onclick="managePosts()">Manage Posts</button>
+                            <button class="admin-btn" onclick="systemStats()" style="background: #00ff00; color: #000;">System Stats</button>
+                            <button class="admin-btn" onclick="deleteAllPosts()" style="background: #ff4444;">Delete All Posts</button>
+                        </div>
+                        <div id="adminOutput"></div>
+                    </div>
+                `;
+            }
+
+            // Остальные методы
+            updateOnlineUsers() {
+                if (this.currentUser) {
+                    this.onlineUsers[this.currentUser] = Date.now();
+                    
+                    const now = Date.now();
+                    for (let user in this.onlineUsers) {
+                        if (now - this.onlineUsers[user] > 5 * 60 * 1000) {
+                            delete this.onlineUsers[user];
+                        }
+                    }
+                    
+                    this.saveData();
+                    this.displayOnlineUsers();
+                }
+            }
+
+            displayOnlineUsers() {
+                const onlineList = document.getElementById('onlineList');
+                const onlineCount = Object.keys(this.onlineUsers).length;
+                
+                document.querySelector('.online-count').textContent = `${onlineCount} user${onlineCount !== 1 ? 's' : ''} online`;
+                
+                onlineList.innerHTML = '';
+                Object.keys(this.onlineUsers).forEach(user => {
+                    const userDiv = document.createElement('div');
+                    userDiv.textContent = `• ${user}`;
+                    userDiv.style.color = '#00ff00';
+                    userDiv.style.fontSize = '11px';
+                    userDiv.style.marginTop = '3px';
+                    onlineList.appendChild(userDiv);
+                });
+            }
+
+            loadChatMessages() {
+                const container = document.getElementById('chatMessages');
+                container.innerHTML = '';
+                
+                if (this.chatMessages.length === 0) {
+                    container.innerHTML = '<div class="empty-message">No messages yet. Start the conversation!</div>';
+                    return;
+                }
+                
+                this.chatMessages.forEach(msg => {
+                    const messageDiv = document.createElement('div');
+                    messageDiv.className = 'chat-message';
+                    messageDiv.innerHTML = `<span class="chat-time">[${msg.time}]</span> <span class="chat-username">${msg.user}</span>: ${msg.message}`;
+                    container.appendChild(messageDiv);
+                });
+                
+                container.scrollTop = container.scrollHeight;
+            }
+
+            sendMessage(message) {
+                if (!message.trim() || !this.currentUser) return;
+                
+                const now = new Date();
+                const time = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`;
+                
+                this.chatMessages.push({
+                    time: time,
+                    user: this.currentUser,
+                    message: message.trim()
+                });
+                
+                if (this.chatMessages.length > 100) {
+                    this.chatMessages = this.chatMessages.slice(-100);
+                }
+                
+                this.saveData();
+                this.loadChatMessages();
+            }
+
+            loadThreads() {
+                const container = document.getElementById('threadsContainer');
+                
+                if (this.posts.length === 0) {
+                    container.innerHTML = '<div class="empty-message">No posts yet. Be the first to create one!</div>';
+                    return;
+                }
+                
+                container.innerHTML = '';
+                this.posts.forEach(post => {
+                    const thread = document.createElement('div');
+                    thread.className = 'thread';
+                    thread.onclick = () => this.viewPost(post.id);
+                    thread.innerHTML = `
+                        <div class="thread-title">${post.title}</div>
+                        <div class="thread-meta">
+                            Started by ${post.author} • ${post.date}
+                        </div>
+                        <div class="thread-stats">
+                            <span class="stat">${post.comments.length} comments</span>
+                            <span class="stat">${post.views} views</span>
+                            <span class="stat">${post.likes} likes</span>
+                            ${post.files.length > 0 ? `<span class="stat">📎 ${post.files.length} files</span>` : ''}
+                            ${this.currentUser === 'Monax' ? `<span class="stat" style="color: #ff4444; cursor: pointer;" onclick="event.stopPropagation(); deletePost(${post.id})">🗑️ Delete</span>` : ''}
+                        </div>
+                    `;
+                    container.appendChild(thread);
+                });
+            }
+
+            viewPost(postId) {
+                const post = this.posts.find(p => p.id === postId);
+                if (!post) return;
+                
+                post.views++;
+                this.saveData();
+                
+                const container = document.getElementById('postContainer');
+                container.innerHTML = `
+                    <div class="post">
+                        <div class="post-header">
+                            <div class="post-title">${post.title}</div>
+                            <div class="post-meta">
+                                Posted by ${post.author} • ${post.date} • ${post.views} views
+                                ${this.currentUser === 'Monax' ? `<span style="color: #ff4444; margin-left: 10px; cursor: pointer;" onclick="deletePost(${post.id})">🗑️ Delete Post</span>` : ''}
+                            </div>
+                        </div>
+                        
+                        <div class="post-content">${post.content}</div>
+                        
+                        ${post.files.length > 0 ? `
+                            <div class="post-attachments">
+                                <strong style="display: block; margin-bottom: 10px; color: #00ff00;">Attached Files:</strong>
+                                ${post.files.map(file => `
+                                    <div class="attachment-item">
+                                        <span class="attachment-icon">📎</span>
+                                        <span class="attachment-name">${file.name}</span>
+                                        <span style="color: #666; font-size: 11px;">${file.size}</span>
+                                        <button class="attachment-download" onclick="forum.downloadFile('${file.name}')">Download</button>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : ''}
+                        
+                        <div class="post-actions">
+                            <div class="post-action" onclick="forum.reactToPost(${post.id}, 'like')">👍 Like (${post.likes})</div>
+                            <div class="post-action" onclick="forum.focusComment(${post.id})">💬 Comment</div>
+                        </div>
+                        
+                        <div class="comments-section">
+                            <div style="color: #00ff00; font-weight: 700; margin-bottom: 15px; font-size: 14px;">
+                                Comments (${post.comments.length})
+                            </div>
+                            
+                            ${post.comments.length > 0 ? post.comments.map(comment => `
+                                <div class="comment">
+                                    <div class="comment-header">
+                                        <span class="comment-author">${comment.author}</span>
+                                        <span class="comment-meta">${comment.date}</span>
+                                        ${this.currentUser === 'Monax' ? `<span style="color: #ff4444; cursor: pointer;" onclick="deleteComment(${post.id}, '${comment.author}', '${comment.date}')">🗑️</span>` : ''}
+                                    </div>
+                                    <div class="comment-content">${comment.content}</div>
+                                </div>
+                            `).join('') : '<div class="empty-message">No comments yet</div>'}
+                            
+                            <div class="add-comment">
+                                <textarea class="comment-input" id="commentInput${post.id}" placeholder="Write your comment..."></textarea>
+                                <button class="comment-submit" onclick="forum.addComment(${post.id})">POST COMMENT</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                this.showSection('post');
+            }
+
+            createPost(event) {
+                event.preventDefault();
+                
+                const title = document.getElementById('postTitle').value;
+                const content = document.getElementById('postContent').value;
+                
+                const files = this.attachedFiles.map(file => ({
+                    name: file.name,
+                    size: (file.size / 1024).toFixed(1) + ' KB',
+                    type: file.name.split('.').pop()
+                }));
+                
+                const newPost = {
+                    id: Date.now(),
+                    title: title,
+                    content: content,
+                    author: this.currentUser,
+                    date: new Date().toLocaleString(),
+                    views: 0,
+                    likes: 0,
+                    files: files,
+                    comments: []
+                };
+                
+                this.posts.unshift(newPost);
+                this.saveData();
+                
+                document.getElementById('postTitle').value = '';
+                document.getElementById('postContent').value = '';
+                document.getElementById('fileList').innerHTML = '';
+                this.attachedFiles = [];
+                
+                this.showSection('threads');
+                this.loadThreads();
+                this.updateForumStats();
+                
+                return newPost;
+            }
+
+            reactToPost(postId, action) {
+                const post = this.posts.find(p => p.id === postId);
+                if (!post) return;
+                
+                if (action === 'like') {
+                    post.likes++;
+                    this.saveData();
+                    this.viewPost(postId);
+                }
+            }
+
+            addComment(postId) {
+                const commentInput = document.getElementById('commentInput' + postId);
+                const comment = commentInput.value.trim();
+                
+                if (!comment) return;
+                
+                const post = this.posts.find(p => p.id === postId);
+                if (!post) return;
+                
+                post.comments.push({
+                    author: this.currentUser,
+                    content: comment,
+                    date: new Date().toLocaleString()
+                });
+                
+                this.saveData();
+                this.viewPost(postId);
+            }
+
+            updateForumStats() {
+                const generalPosts = this.posts.filter(post => !post.title.includes('[RELEASE]'));
+                const announcements = this.posts.filter(post => post.title.includes('[RELEASE]'));
+                
+                document.getElementById('generalCount').textContent = generalPosts.length;
+                document.getElementById('generalPosts').textContent = generalPosts.reduce((sum, post) => sum + post.comments.length, 0);
+                document.getElementById('announcementsCount').textContent = announcements.length;
+                document.getElementById('announcementsPosts').textContent = announcements.reduce((sum, post) => sum + post.comments.length, 0);
+                
+                if (this.posts.length > 0) {
+                    const latestPost = this.posts[0];
+                    document.getElementById('generalLast').textContent = `${latestPost.date} by ${latestPost.author}`;
+                    document.getElementById('announcementsLast').textContent = announcements.length > 0 ? 
+                        `${announcements[0].date} by ${announcements[0].author}` : 'Never';
+                }
+            }
+
+            handleFileSelect(event) {
+                const files = event.target.files;
+                const fileList = document.getElementById('fileList');
+                
+                for (let file of files) {
+                    this.attachedFiles.push(file);
+                    const fileItem = document.createElement('div');
+                    fileItem.className = 'file-item';
+                    fileItem.innerHTML = `
+                        <span class="file-name">📎 ${file.name}</span>
+                        <span class="remove-file" onclick="forum.removeFile('${file.name}')">✕</span>
+                    `;
+                    fileList.appendChild(fileItem);
+                }
+            }
+
+            removeFile(fileName) {
+                this.attachedFiles = this.attachedFiles.filter(file => file.name !== fileName);
+                const fileList = document.getElementById('fileList');
+                fileList.innerHTML = '';
+                
+                this.attachedFiles.forEach(file => {
+                    const fileItem = document.createElement('div');
+                    fileItem.className = 'file-item';
+                    fileItem.innerHTML = `
+                        <span class="file-name">📎 ${file.name}</span>
+                        <span class="remove-file" onclick="forum.removeFile('${file.name}')">✕</span>
+                    `;
+                    fileList.appendChild(fileItem);
+                });
+            }
+
+            downloadFile(filename) {
+                alert(`Downloading: ${filename}\n\nFile download simulation.`);
+            }
+
+            logout() {
+                delete this.onlineUsers[this.currentUser];
+                this.currentUser = '';
+                this.saveData();
+                location.reload();
+            }
+        }
+
+        // Глобальные функции
+        const forum = new GameSenseForum();
+
+        function showTab(tab) {
+            document.getElementById('loginForm').style.display = tab === 'login' ? 'block' : 'none';
+            document.getElementById('registerForm').style.display = tab === 'register' ? 'block' : 'none';
+            
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        function login() {
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+            const key = document.getElementById('loginKey').value;
+            const errorDiv = document.getElementById('loginError');
+
+            if (!username || !password || !key) {
+                errorDiv.textContent = 'Please fill all fields!';
+                return;
+            }
+
+            const result = forum.loginUser(username, password, key);
+            if (!result.success) {
+                errorDiv.textContent = result.message;
+                return;
+            }
+
+            // Логиним сразу
+            forum.showForum(username);
+        }
+
+        function register() {
+            const username = document.getElementById('regUsername').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+            const errorDiv = document.getElementById('regError');
+
+            if (!username || !email || !password) {
+                errorDiv.textContent = 'Please fill all fields!';
+                return;
+            }
+
+            const result = forum.registerUser(username, email, password);
+            if (!result.success) {
+                errorDiv.textContent = result.message;
+                return;
+            }
+
+            errorDiv.style.color = '#00ff00';
+            errorDiv.textContent = result.message;
+            
+            // Переключаем на логин после успешной регистрации
+            setTimeout(() => showTab('login'), 2000);
+        }
+
+        function showPurchaseModal() {
+            document.getElementById('purchaseModal').style.display = 'block';
+        }
+
+        function processPayment() {
+            const email = document.getElementById('purchaseEmail').value;
+            const paymentMethod = document.getElementById('paymentMethod').value;
+            const errorDiv = document.getElementById('purchaseError');
+
+            if (!email) {
+                errorDiv.textContent = 'Please enter your email!';
+                return;
+            }
+
+            const result = forum.purchaseKey(forum.currentUser, email, paymentMethod);
+            if (result.success) {
+                alert(`Payment successful!\n\nYour access key: ${result.key}\n\nKey has been sent to: ${email}`);
+                document.getElementById('purchaseModal').style.display = 'none';
+                forum.loadProfile();
+            } else {
+                errorDiv.textContent = result.message;
+            }
+        }
+
+        function showHwidResetModal() {
+            document.getElementById('hwidModal').style.display = 'block';
+            forum.updateHwidResetStatus();
+        }
+
+        function resetHWID() {
+            const result = forum.resetHWID(forum.currentUser);
+            if (result.success) {
+                alert('HWID reset successfully!');
+                document.getElementById('hwidModal').style.display = 'none';
+                forum.loadProfile();
+            } else {
+                document.getElementById('hwidError').textContent = result.message;
+            }
+        }
+
+        // Admin Functions
+        function generateAccessKey() {
+            const key = 'GS_' + Math.random().toString(36).substr(2, 12).toUpperCase();
+            forum.accessKeys[key] = {
+                generatedBy: forum.currentUser,
+                generatedAt: new Date().toISOString(),
+                used: false,
+                usedBy: null
+            };
+            forum.saveData();
+            
+            const output = document.getElementById('adminOutput') || document.querySelector('#adminContent #adminOutput');
+            if (output) {
+                output.innerHTML = `
+                    <div class="key-item">
+                        <span class="key-code">${key}</span>
+                        <span class="key-status status-active">ACTIVE</span>
+                    </div>
+                    <div style="color: #00ff00; margin-top: 10px; font-size: 12px;">
+                        New access key generated successfully!
+                    </div>
+                `;
+            }
+            alert(`New access key generated:\n\n${key}`);
+        }
+
+        function viewAllUsers() {
+            const output = document.getElementById('adminOutput') || document.querySelector('#adminContent #adminOutput');
+            if (!output) return;
+            
+            let usersHTML = '<div class="user-list">';
+            
+            Object.keys(forum.users).forEach(username => {
+                const user = forum.users[username];
+                usersHTML += `
+                    <div class="user-item">
+                        <div>
+                            <span class="user-name">${username}</span>
+                            <span class="user-role">${user.role}</span>
+                        </div>
+                        <div class="user-actions">
+                            ${username !== 'Monax' ? `
+                                <button class="delete-btn" onclick="deleteUser('${username}')">Delete</button>
+                                <button class="reset-btn" onclick="resetUserHWID('${username}')">Reset HWID</button>
+                            ` : '<span style="color: #ff4444; font-size: 10px;">ADMIN</span>'}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            usersHTML += '</div>';
+            output.innerHTML = usersHTML;
+        }
+
+        function managePosts() {
+            const output = document.getElementById('adminOutput') || document.querySelector('#adminContent #adminOutput');
+            if (!output) return;
+            
+            let postsHTML = '<div class="user-list">';
+            
+            if (forum.posts.length === 0) {
+                postsHTML += '<div class="empty-message">No posts yet</div>';
+            } else {
+                forum.posts.forEach(post => {
+                    postsHTML += `
+                        <div class="user-item">
+                            <div>
+                                <span class="user-name">${post.title}</span>
+                                <span class="user-role">by ${post.author}</span>
+                            </div>
+                            <div class="user-actions">
+                                <button class="delete-btn" onclick="deletePost(${post.id})">Delete</button>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+            
+            postsHTML += '</div>';
+            output.innerHTML = postsHTML;
+        }
+
+        function systemStats() {
+            const output = document.getElementById('adminOutput') || document.querySelector('#adminContent #adminOutput');
+            if (!output) return;
+            
+            const stats = `
+                <div style="color: #00ff00; font-size: 14px; margin-bottom: 15px;">
+                    System Statistics
+                </div>
+                <div style="color: #d0d0d0; font-size: 12px; line-height: 1.8;">
+                    <div>Total Users: <strong>${Object.keys(forum.users).length}</strong></div>
+                    <div>Total Posts: <strong>${forum.posts.length}</strong></div>
+                    <div>Total Access Keys: <strong>${Object.keys(forum.accessKeys).length}</strong></div>
+                    <div>Online Users: <strong>${Object.keys(forum.onlineUsers).length}</strong></div>
+                    <div>Chat Messages: <strong>${forum.chatMessages.length}</strong></div>
+                </div>
+            `;
+            
+            output.innerHTML = stats;
+        }
+
+        function deleteUser(username) {
+            if (confirm(`Are you sure you want to delete user ${username}?`)) {
+                const result = forum.deleteUser(username);
+                alert(result.message);
+                if (result.success) {
+                    viewAllUsers();
+                }
+            }
+        }
+
+        function resetUserHWID(username) {
+            if (confirm(`Reset HWID for user ${username}?`)) {
+                const result = forum.resetUserHWID(username);
+                alert(result.message);
+            }
+        }
+
+        function deletePost(postId) {
+            if (confirm('Are you sure you want to delete this post?')) {
+                const result = forum.deletePost(postId);
+                alert(result.message);
+                if (result.success) {
+                    forum.loadThreads();
+                    if (document.getElementById('postSection').style.display !== 'none') {
+                        forum.showSection('threads');
+                    }
+                    managePosts();
+                }
+            }
+        }
+
+        function deleteComment(postId, author, date) {
+            if (confirm('Are you sure you want to delete this comment?')) {
+                const post = forum.posts.find(p => p.id === postId);
+                if (post) {
+                    post.comments = post.comments.filter(comment => 
+                        !(comment.author === author && comment.date === date)
+                    );
+                    forum.saveData();
+                    forum.viewPost(postId);
+                    alert('Comment deleted successfully!');
+                }
+            }
+        }
+
+        function deleteAllPosts() {
+            if (confirm('Are you sure you want to delete ALL posts? This cannot be undone!')) {
+                const result = forum.deleteAllPosts();
+                alert(result.message);
+                if (result.success) {
+                    forum.loadThreads();
+                    managePosts();
+                }
+            }
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (message) {
+                forum.sendMessage(message);
+                input.value = '';
+            }
+        }
+
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', function() {
+            if (forum.currentUser) {
+                forum.showForum(forum.currentUser);
+            }
+            
+            document.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && document.getElementById('chatInput')) {
+                    sendMessage();
+                }
+            });
+        });
+    </script>
+</body>
+  </html>
