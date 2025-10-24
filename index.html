@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameSense.pub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #0a0a0a;
+            color: #c0c0c0;
+            font-size: 12px;
+            line-height: 1.3;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* Header */
+        .header {
+            background: #1a1a1a;
+            border-bottom: 1px solid #333;
+            padding: 8px 0;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: #00cc00;
+            font-size: 18px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 11px;
+        }
+
+        .user-badge {
+            background: #00cc00;
+            color: #000;
+            padding: 2px 6px;
+            border-radius: 2px;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        .creator-badge {
+            background: #ff4444;
+            color: #fff;
+            padding: 2px 6px;
+            border-radius: 2px;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        .logout-btn {
+            background: #333;
+            color: #c0c0c0;
+            padding: 3px 8px;
+            border: 1px solid #444;
+            border-radius: 2px;
+            font-size: 10px;
+            cursor: pointer;
+        }
+
+        /* Navigation */
+        .main-nav {
+            background: #151515;
+            border-bottom: 1px solid #333;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 0;
+        }
+
+        .nav-link {
+            padding: 8px 15px;
+            color: #c0c0c0;
+            text-decoration: none;
+            border-right: 1px solid #333;
+            font-size: 11px;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: #252525;
+            color: #00cc00;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            background: #151515;
+            padding: 6px 15px;
+            border-bottom: 1px solid #333;
+            font-size: 10px;
+            color: #666;
+        }
+
+        /* Forum Content */
+        .forum-content {
+            margin: 15px 0;
+        }
+
+        .forum-stats {
+            background: #151515;
+            padding: 8px 15px;
+            border: 1px solid #333;
+            margin-bottom: 10px;
+            font-size: 11px;
+        }
+
+        .stats-grid {
+            display: flex;
+            gap: 20px;
+        }
+
+        .stat {
+            color: #00cc00;
+        }
+
+        /* Forum Sections */
+        .forum-section {
+            background: #151515;
+            border: 1px solid #333;
+            margin-bottom: 10px;
+        }
+
+        .section-header {
+            background: #1a1a1a;
+            padding: 8px 15px;
+            border-bottom: 1px solid #333;
+            color: #00cc00;
+            font-weight: bold;
+            font-size: 11px;
+        }
+
+        .thread-list {
+            padding: 0;
+        }
+
+        .thread {
+            padding: 8px 15px;
+            border-bottom: 1px solid #252525;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .thread:last-child {
+            border-bottom: none;
+        }
+
+        .thread-icon {
+            color: #00cc00;
+            font-size: 10px;
+        }
+
+        .thread-title {
+            color: #c0c0c0;
+            text-decoration: none;
+            font-size: 11px;
+            flex-grow: 1;
+        }
+
+        .thread-title:hover {
+            color: #00cc00;
+        }
+
+        .thread-meta {
+            font-size: 10px;
+            color: #666;
+        }
+
+        .thread-stats {
+            text-align: right;
+            min-width: 60px;
+            font-size: 10px;
+        }
+
+        .thread-replies {
+            color: #00cc00;
+            font-weight: bold;
+        }
+
+        /* Auth Section */
+        .auth-section {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 0 15px;
+        }
+
+        .auth-box {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            padding: 20px;
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .logo-auth {
+            color: #00cc00;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #333;
+        }
+
+        .auth-tab {
+            padding: 8px 15px;
+            color: #666;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            font-size: 11px;
+        }
+
+        .auth-tab.active {
+            color: #00cc00;
+            border-bottom-color: #00cc00;
+        }
+
+        .form-group {
+            margin-bottom: 10px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 3px;
+            color: #00cc00;
+            font-size: 11px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 6px 8px;
+            background: #252525;
+            border: 1px solid #333;
+            color: #c0c0c0;
+            font-size: 11px;
+        }
+
+        .submit-btn {
+            background: #00cc00;
+            color: #000;
+            padding: 8px;
+            border: none;
+            width: 100%;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 11px;
+            margin-top: 5px;
+        }
+
+        .error-message {
+            color: #ff4444;
+            font-size: 10px;
+            margin-top: 8px;
+            text-align: center;
+        }
+
+        .info-message {
+            background: #151515;
+            border: 1px solid #333;
+            padding: 15px;
+            text-align: center;
+            margin-top: 15px;
+            font-size: 11px;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+            font-size: 10px;
+        }
+
+        /* Thread View */
+        .thread-view {
+            background: #151515;
+            border: 1px solid #333;
+            margin-bottom: 10px;
+        }
+
+        .thread-header {
+            background: #1a1a1a;
+            padding: 10px 15px;
+            border-bottom: 1px solid #333;
+        }
+
+        .thread-title-main {
+            color: #00cc00;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .thread-meta-main {
+            font-size: 10px;
+            color: #666;
+        }
+
+        .post {
+            padding: 10px 15px;
+            border-bottom: 1px solid #252525;
+        }
+
+        .post:last-child {
+            border-bottom: none;
+        }
+
+        .post-header {
+            display: flex;
+            justify-content: between;
+            margin-bottom: 8px;
+        }
+
+        .post-author {
+            color: #00cc00;
+            font-weight: bold;
+            font-size: 11px;
+        }
+
+        .post-date {
+            color: #666;
+            font-size: 10px;
+        }
+
+        .post-content {
+            font-size: 11px;
+            line-height: 1.4;
+        }
+
+        .admin-panel {
+            background: #252525;
+            padding: 10px;
+            border: 1px solid #ff4444;
+            margin: 10px 0;
+        }
+
+        .admin-btn {
+            background: #ff4444;
+            color: #fff;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 2px;
+            cursor: pointer;
+            font-size: 10px;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Auth Section -->
+    <div id="authSection" class="auth-section">
+        <div class="auth-box">
+            <div class="auth-header">
+                <div class="logo-auth">GameSense</div>
+                <div style="font-size: 11px; color: #666;">Index Register Login</div>
+            </div>
+
+            <div class="auth-tabs">
+                <div class="auth-tab active" onclick="showTab('login')">Login</div>
+                <div class="auth-tab" onclick="showTab('register')">Register</div>
+            </div>
+
+            <!-- Login Form -->
+            <div id="loginForm">
+                <div class="form-group">
+                    <label>USERNAME</label>
+                    <input type="text" id="loginUsername">
+                </div>
+                <div class="form-group">
+                    <label>PASSWORD</label>
+                    <input type="password" id="loginPassword">
+                </div>
+                <div class="form-group">
+                    <label>ACCESS KEY</label>
+                    <input type="text" id="loginKey">
+                </div>
+                <button class="submit-btn" onclick="login()">LOGIN</button>
+                <div id="loginError" class="error-message"></div>
+            </div>
+
+            <!-- Register Form -->
+            <div id="registerForm" style="display: none;">
+                <div class="form-group">
+                    <label>USERNAME</label>
+                    <input type="text" id="regUsername">
+                </div>
+                <div class="form-group">
+                    <label>PASSWORD</label>
+                    <input type="password" id="regPassword">
+                </div>
+                <div class="form-group">
+                    <label>ACCESS KEY</label>
+                    <input type="text" id="regKey">
+                </div>
+                <button class="submit-btn" onclick="register()">REGISTER</button>
+                <div id="regError" class="error-message"></div>
+            </div>
+        </div>
+
+        <div class="info-message">
+            <strong>You do not have permission to view these forums.</strong><br>
+            You are not logged in.
+        </div>
+
+        <div class="footer">
+            GameSense 2025
+        </div>
+    </div>
+
+    <!-- Forum Section (Hidden until auth) -->
+    <div id="forumSection" style="display: none;">
+        <!-- Header -->
+        <div class="header">
+            <div class="container">
+                <div class="header-content">
+                    <a href="#" class="logo">GameSense.pub</a>
+                    <div class="user-info" id="userInfo">
+                        <!-- User info will be inserted here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="main-nav">
+            <div class="container">
+                <div class="nav-links">
+                    <a href="#" class="nav-link active">Index</a>
+                    <a href="#" class="nav-link">Forums</a>
+                    <a href="#" class="nav-link">Configs</a>
+                    <a href="#" class="nav-link">Lua Scripts</a>
+                    <a href="#" class="nav-link">Support</a>
+                    <a href="#" class="nav-link">Downloads</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">
+            <div class="container">
+                <a href="#">GameSense.pub</a> &raquo; <a href="#">Forums</a> &raquo; Index
+            </div>
+        </div>
+
+        <!-- Forum Content -->
+        <div class="container">
+            <div class="forum-stats">
+                <div class="stats-grid">
+                    <div>Threads: <span class="stat">15,294</span></div>
+                    <div>Posts: <span class="stat">128,447</span></div>
+                    <div>Members: <span class="stat">12,847</span></div>
+                    <div>Online: <span class="stat">428</span></div>
+                </div>
+            </div>
+
+            <!-- Admin Panel for Creator -->
+            <div id="adminPanel" style="display: none;" class="admin-panel">
+                <strong>Admin Panel</strong>
+                <button class="admin-btn" onclick="generateKey()">Generate Access Key</button>
+                <button class="admin-btn" onclick="viewUsers()">View Users</button>
+                <div id="adminOutput" style="margin-top: 8px; font-size: 10px;"></div>
+            </div>
+
+            <!-- Forum Sections -->
+            <div class="forum-section">
+                <div class="section-header">
+                    General Discussion
+                </div>
+                <div class="thread-list">
+                    <div class="thread">
+                        <span class="thread-icon">›</span>
+                        <div style="flex-grow: 1;">
+                            <a href="#" class="thread-title">[RELEASE] GameSense v3.1.7 Latest Build</a>
+                            <div class="thread-meta">Started by Monax, Today 14:32</div>
+                        </div>
+                        <div class="thread-stats">
+                            <div class="thread-replies">247</div>
+                            <div>1.2k views</div>
+                        </div>
+                    </div>
+                    <div class="thread">
+                        <span class="thread-icon">›</span>
+                        <div style="flex-grow: 1;">
+                            <a href="#" class="thread-title">Official Configurations Repository</a>
+                            <div class="thread-meta">Started by System, Yesterday 18:15</div>
+                        </div>
+                        <div class="thread-stats">
+                            <div class="thread-replies">89</div>
+                            <div>2.4k views</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="forum-section">
+                <div class="section-header">
+                    Lua Scripts
+                </div>
+                <div class="thread-list">
+                    <div class="thread">
+                        <span class="thread-icon">›</span>
+                        <div style="flex-grow: 1;">
+                            <a href="#" class="thread-title">[LUA] Advanced Ragebot Script v2.1</a>
+                            <div class="thread-meta">Started by User_847, Today 12:45</div>
+                        </div>
+                        <div class="thread-stats">
+                            <div class="thread-replies">23</div>
+                            <div>542 views</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Real authentication system
+        const system = {
+            admin: {
+                username: 'Monax',
+                password: 'Kzrhdf1992A_',
+                role: 'creator',
+                accessKey: 'GS_38838383'
+            },
+            users: {},
+            accessKeys: {},
+            hwidRecords: {}
+        };
+
+        // Generate HWID
+        function generateHWID() {
+            return 'HWID_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9).toUpperCase();
+        }
+
+        // Generate access key
+        function generateAccessKey() {
+            return 'GS_' + Math.floor(10000000 + Math.random() * 90000000);
+        }
+
+        // Tab switching
+        function showTab(tab) {
+            document.getElementById('loginForm').style.display = tab === 'login' ? 'block' : 'none';
+            document.getElementById('registerForm').style.display = tab === 'register' ? 'block' : 'none';
+            
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        // Login function
+        function login() {
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+            const key = document.getElementById('loginKey').value;
+            const errorDiv = document.getElementById('loginError');
+
+            if (!username || !password || !key) {
+                errorDiv.textContent = 'Please fill all fields!';
+                return;
+            }
+
+            // Admin login
+            if (username === system.admin.username && password === system.admin.password) {
+                if (key === system.admin.accessKey) {
+                    const hwid = generateHWID();
+                    system.hwidRecords[username] = hwid;
+                    localStorage.setItem('gs_username', username);
+                    localStorage.setItem('gs_hwid', hwid);
+                    showForum(username, 'creator');
+                    return;
+                } else {
+                    errorDiv.textContent = 'Invalid access key!';
+                    return;
+                }
+            }
+
+            // User login
+            if (system.users[username] && system.users[username].password === password) {
+                if (system.users[username].accessKey === key) {
+                    const hwid = generateHWID();
+                    system.hwidRecords[username] = hwid;
+                    localStorage.setItem('gs_username', username);
+                    localStorage.setItem('gs_hwid', hwid);
+                    showForum(username, 'user');
+                } else {
+                    errorDiv.textContent = 'Invalid access key!';
+                }
+            } else {
+                errorDiv.textContent = 'Invalid credentials!';
+            }
+        }
+
+        // Register function
+        function register() {
+            const username = document.getElementById('regUsername').value;
+            const password = document.getElementById('regPassword').value;
+            const key = document.getElementById('regKey').value;
+            const errorDiv = document.getElementById('regError');
+
+            if (!username || !password || !key) {
+                errorDiv.textContent = 'Please fill all fields!';
+                return;
+            }
+
+            // Check if key is valid GS format
+            if (!key.startsWith('GS_')) {
+                errorDiv.textContent = 'Invalid access key format!';
+                return;
+            }
+
+            // Check if username exists
+            if (system.users[username] || username === system.admin.username) {
+                errorDiv.textContent = 'Username already exists!';
+                return;
+            }
+
+            // Register user
+            system.users[username] = {
+                password: password,
+                accessKey: key,
+                role: 'user',
+                joinDate: new Date()
+            };
+
+            const hwid = generateHWID();
+            system.hwidRecords[username] = hwid;
+            localStorage.setItem('gs_username', username);
+            localStorage.setItem('gs_hwid', hwid);
+
+            showForum(username, 'user');
+        }
+
+        // Show forum
+        function showForum(username, role) {
+            document.getElementById('authSection').style.display = 'none';
+            document.getElementById('forumSection').style.display = 'block';
+
+            const userInfo = document.getElementById('userInfo');
+            userInfo.innerHTML = `
+                <span>${username}</span>
+                <div class="${role === 'creator' ? 'creator-badge' : 'user-badge'}">
+                    ${role === 'creator' ? 'CREATOR' : 'MEMBER'}
+                </div>
+                <button class="logout-btn" onclick="logout()">Logout</button>
+            `;
+
+            // Show admin panel for creator
+            if (role === 'creator') {
+                document.getElementById('adminPanel').style.display = 'block';
+            }
+        }
+
+        // Admin functions
+        function generateKey() {
+            const newKey = generateAccessKey();
+            system.accessKeys[newKey] = {
+                generatedBy: 'Monax',
+                generatedAt: new Date(),
+                used: false
+            };
+            document.getElementById('adminOutput').innerHTML = 
+                `<span style="color: #00cc00;">Generated Key: ${newKey}</span>`;
+        }
+
+        function viewUsers() {
+            const userCount = Object.keys(system.users).length;
+            document.getElementById('adminOutput').innerHTML = 
+                `<span style="color: #00cc00;">Registered Users: ${userCount}</span>`;
+        }
+
+        // Logout
+        function logout() {
+            localStorage.removeItem('gs_username');
+            localStorage.removeItem('gs_hwid');
+            location.reload();
+        }
+
+        // Check existing session
+        window.addEventListener('load', function() {
+            const username = localStorage.getItem('gs_username');
+            const hwid = localStorage.getItem('gs_hwid');
+
+            if (username && hwid) {
+                const role = username === system.admin.username ? 'creator' : 'user';
+                showForum(username, role);
+            }
+        });
+    </script>
+</body>
+  </html>
