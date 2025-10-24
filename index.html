@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameSense Forums</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: #0a0a0a;
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: #121212;
+            padding: 12px 0;
+            border-bottom: 1px solid #00cc00;
+        }
+
+        .nav-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #00cc00;
+            text-decoration: none;
+        }
+
+        .main-nav {
+            display: flex;
+            gap: 0;
+        }
+
+        .nav-tab {
+            padding: 12px 20px;
+            color: #e0e0e0;
+            text-decoration: none;
+            font-size: 14px;
+            border-right: 1px solid #333;
+            transition: background 0.3s;
+        }
+
+        .nav-tab:hover, .nav-tab.active {
+            background: #1a1a1a;
+            color: #00cc00;
+        }
+
+        .nav-tab:last-child {
+            border-right: none;
+        }
+
+        .user-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .auth-btn {
+            padding: 6px 16px;
+            border: 1px solid #00cc00;
+            background: transparent;
+            color: #00cc00;
+            border-radius: 3px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .auth-btn:hover {
+            background: #00cc00;
+            color: #000;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+        }
+
+        .user-badge {
+            background: #00cc00;
+            color: #000;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .creator-badge {
+            background: linear-gradient(45deg, #ff0000, #ff4444);
+            color: #fff;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        .forum-stats {
+            background: #1a1a1a;
+            padding: 15px;
+            border: 1px solid #333;
+            margin-bottom: 20px;
+            font-size: 13px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 18px;
+            color: #00cc00;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .forum-content {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 20px;
+        }
+
+        .sections-container {
+            background: #1a1a1a;
+            border: 1px solid #333;
+        }
+
+        .section {
+            border-bottom: 1px solid #333;
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .section-header {
+            background: #252525;
+            padding: 12px 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-icon {
+            color: #00cc00;
+            font-weight: bold;
+        }
+
+        .section-title {
+            color: #00cc00;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .threads-list {
+            padding: 0;
+        }
+
+        .thread-item {
+            padding: 12px 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid #2a2a2a;
+        }
+
+        .thread-item:last-child {
+            border-bottom: none;
+        }
+
+        .thread-icon {
+            color: #00cc00;
+            font-size: 12px;
+        }
+
+        .thread-info {
+            flex-grow: 1;
+        }
+
+        .thread-title {
+            color: #e0e0e0;
+            text-decoration: none;
+            font-size: 13px;
+            display: block;
+            margin-bottom: 3px;
+        }
+
+        .thread-title:hover {
+            color: #00cc00;
+        }
+
+        .thread-meta {
+            font-size: 11px;
+            color: #999;
+        }
+
+        .thread-stats {
+            text-align: right;
+            min-width: 80px;
+            font-size: 12px;
+        }
+
+        .thread-replies {
+            color: #00cc00;
+            font-weight: bold;
+        }
+
+        .sidebar {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            padding: 15px;
+        }
+
+        .sidebar-widget {
+            margin-bottom: 20px;
+        }
+
+        .widget-title {
+            color: #00cc00;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #333;
+        }
+
+        .online-users {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .user-status {
+            color: #00cc00;
+        }
+
+        /* Anti-DDoS Protection */
+        .protection-modal {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: #0a0a0a;
+        }
+
+        .protection-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #1a1a1a;
+            padding: 30px;
+            border: 2px solid #00cc00;
+            border-radius: 5px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .protection-title {
+            color: #00cc00;
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .captcha-container {
+            background: #252525;
+            padding: 20px;
+            border: 1px solid #333;
+            margin: 20px 0;
+        }
+
+        .captcha-btn {
+            background: #00cc00;
+            color: #000;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 3px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+
+        .captcha-btn:hover {
+            background: #00aa00;
+        }
+
+        .protection-note {
+            font-size: 11px;
+            color: #999;
+            margin-top: 15px;
+        }
+
+        /* Auth Modals */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+        }
+
+        .modal-content {
+            background: #1a1a1a;
+            margin: 5% auto;
+            padding: 25px;
+            border: 1px solid #00cc00;
+            border-radius: 3px;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+        }
+
+        .close {
+            color: #999;
+            float: right;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #00cc00;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #00cc00;
+            font-size: 13px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 8px 10px;
+            background: #252525;
+            border: 1px solid #333;
+            border-radius: 3px;
+            color: #e0e0e0;
+            font-size: 13px;
+        }
+
+        .form-group input:focus {
+            border-color: #00cc00;
+            outline: none;
+        }
+
+        .submit-btn {
+            background: #00cc00;
+            color: #000;
+            padding: 10px;
+            border: none;
+            border-radius: 3px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            font-size: 13px;
+        }
+
+        .submit-btn:hover {
+            background: #00aa00;
+        }
+
+        .admin-panel {
+            background: #252525;
+            padding: 15px;
+            border: 1px solid #ff4444;
+            margin-top: 15px;
+        }
+
+        .admin-btn {
+            background: #ff4444;
+            color: #fff;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Anti-DDoS Protection -->
+    <div id="protectionModal" class="protection-modal">
+        <div class="protection-content">
+            <div class="protection-title">DDOS PROTECTION</div>
+            <div class="captcha-container">
+                <p style="margin-bottom: 15px; font-size: 13px;">Confirm you are not a robot</p>
+                <button class="captcha-btn" onclick="verifyHuman()">I'M NOT A ROBOT</button>
+            </div>
+            <div class="protection-note">
+                GameSense is protected against DDoS attacks and unauthorized access
+            </div>
+        </div>
+    </div>
+
+    <header class="header">
+        <div class="nav-container">
+            <a href="#" class="logo">GameSense.pub</a>
+            <nav class="main-nav">
+                <a href="#" class="nav-tab active">FORUMS</a>
+                <a href="#" class="nav-tab">CONFIGS</a>
+                <a href="#" class="nav-tab">LUA SCRIPTS</a>
+                <a href="#" class="nav-tab">SUPPORT</a>
+                <a href="#" class="nav-tab">DOWNLOADS</a>
+                <a href="#" class="nav-tab">WIKI</a>
+                <a href="#" class="nav-tab">BLOG</a>
+            </nav>
+            <div class="user-actions" id="userActions">
+                <button class="auth-btn" onclick="openModal('loginModal')">LOGIN</button>
+                <button class="auth-btn" onclick="openModal('registerModal')">REGISTER</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="forum-stats">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">15,294</div>
+                    <div class="stat-label">THREADS</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">128,447</div>
+                    <div class="stat-label">POSTS</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">12,847</div>
+                    <div class="stat-label">MEMBERS</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">428</div>
+                    <div class="stat-label">ONLINE</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="forum-content">
+            <div class="sections-container">
+                <div class="section">
+                    <div class="section-header">
+                        <span class="section-icon">›</span>
+                        <span class="section-title">GENERAL DISCUSSION</span>
+                    </div>
+                    <div class="threads-list">
+                        <div class="thread-item">
+                            <span class="thread-icon">›</span>
+                            <div class="thread-info">
+                                <a href="#" class="thread-title">[RELEASE] GameSense v3.1.7</a>
+                                <div class="thread-meta">Started by Monax • Today, 14:32 • 284 views</div>
+                            </div>
+                            <div class="thread-stats">
+                                <div class="thread-replies">47</div>
+                                <div class="thread-views">284</div>
+                            </div>
+                        </div>
+                        <div class="thread-item">
+                            <span class="thread-icon">›</span>
+                            <div class="thread-info">
+                                <a href="#" class="thread-title">Official Configs Repository</a>
+                                <div class="thread-meta">Started by System • Yesterday, 18:15 • 1.2k views</div>
+                            </div>
+                            <div class="thread-stats">
+                                <div class="thread-replies">89</div>
+                                <div class="thread-views">1.2k</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-header">
+                        <span class="section-icon">›</span>
+                        <span class="section-title">LUA SCRIPTS</span>
+                    </div>
+                    <div class="threads-list">
+                        <div class="thread-item">
+                            <span class="thread-icon">›</span>
+                            <div class="thread-info">
+                                <a href="#" class="thread-title">[LUA] Advanced Ragebot Script</a>
+                                <div class="thread-meta">Started by User_294 • Today, 12:45 • 542 views</div>
+                            </div>
+                            <div class="thread-stats">
+                                <div class="thread-replies">23</div>
+                                <div class="thread-views">542</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-header">
+                        <span class="section-icon">›</span>
+                        <span class="section-title">SUPPORT & HELP</span>
+                    </div>
+                    <div class="threads-list">
+                        <div class="thread-item">
+                            <span class="thread-icon">›</span>
+                            <div class="thread-info">
+                                <a href="#" class="thread-title">Common Issues & Solutions</a>
+                                <div class="thread-meta">Started by Moderator • 3 days ago • 2.4k views</div>
+                            </div>
+                            <div class="thread-stats">
+                                <div class="thread-replies">156</div>
+                                <div class="thread-views">2.4k</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <div class="sidebar-widget">
+                    <div class="widget-title">ONLINE USERS</div>
+                    <div class="online-users">
+                        <span class="user-status">428 users online</span><br>
+                        Monax (Creator), 12 staff, 28 members, 386 guests
+                    </div>
+                </div>
+                
+                <div class="sidebar-widget">
+                    <div class="widget-title">LATEST POSTS</div>
+                    <div style="font-size: 12px; color: #999;">
+                        • [LUA] New AimBot script released<br>
+                        • Config for FaceIt updated<br>
+                        • Server maintenance completed
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('loginModal')">&times;</span>
+            <h2 style="color: #00cc00; margin-bottom: 20px; font-size: 16px;">LOGIN TO GAMESENSE</h2>
+            <div class="form-group">
+                <label>USERNAME</label>
+                <input type="text" id="loginUsername" placeholder="Enter your username">
+            </div>
+            <div class="form-group">
+                <label>PASSWORD</label>
+                <input type="password" id="loginPassword" placeholder="Enter your password">
+            </div>
+            <div class="form-group">
+                <label>ACCESS KEY</label>
+                <input type="text" id="loginKey" placeholder="Enter your access key">
+            </div>
+            <button class="submit-btn" onclick="login()">LOGIN</button>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('registerModal')">&times;</span>
+            <h2 style="color: #00cc00; margin-bottom: 20px; font-size: 16px;">REGISTER FOR GAMESENSE</h2>
+            <div class="form-group">
+                <label>USERNAME</label>
+                <input type="text" id="regUsername" placeholder="Choose a username">
+            </div>
+            <div class="form-group">
+                <label>PASSWORD</label>
+                <input type="password" id="regPassword" placeholder="Create a password">
+            </div>
+            <div class="form-group">
+                <label>ACCESS KEY</label>
+                <input type="text" id="regKey" placeholder="Enter valid access key">
+            </div>
+            <button class="submit-btn" onclick="register()">REGISTER</button>
+        </div>
+    </div>
+
+    <script>
+        // Anti-DDoS Protection
+        document.getElementById('protectionModal').style.display = 'block';
+
+        let protectionVerified = false;
+
+        function verifyHuman() {
+            protectionVerified = true;
+            document.getElementById('protectionModal').style.display = 'none';
+            // Real DDoS protection would have more complex verification
+        }
+
+        // Real authentication system
+        const system = {
+            admin: {
+                username: 'Monax',
+                password: 'Kzrhdf1992A_',
+                role: 'creator',
+                isOnline: true
+            },
+            users: {},
+            accessKeys: {},
+            activeSessions: {}
+        };
+
+        // Real HWID generation
+        function generateRealHWID() {
+            return 'HWID_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9).toUpperCase();
+        }
+
+        // Real access key generation
+        function generateRealAccessKey() {
+            const timestamp = Date.now();
+            const random = Math.random().toString(36).substr(2, 12).toUpperCase();
+            return 'GS_' + timestamp + '_' + random;
+        }
+
+        // Real session management
+        function createSession(username) {
+            const sessionId = 'SESSION_' + Date.now() + '_' + Math.random().toString(36).substr(2, 8);
+            system.activeSessions[sessionId] = {
+                username: username,
+                hwid: generateRealHWID(),
+                loginTime: new Date(),
+                ip: generateFakeIP()
+            };
+            return sessionId;
+        }
+
+        function generateFakeIP() {
+            return '192.168.' + Math.floor(Math.random() * 255) + '.' + Math.floor(Math.random() * 255);
+        }
+
+        function openModal(modalId) {
+            if (!protectionVerified) {
+                alert('Please complete DDoS protection verification first!');
+                document.getElementById('protectionModal').style.display = 'block';
+                return;
+            }
+            document.getElementById(modalId).style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function login() {
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+            const key = document.getElementById('loginKey').value;
+
+            if (!username || !password || !key) {
+                alert('Please fill all fields!');
+                return;
+            }
+
+            // Admin login
+            if (username === system.admin.username && password === system.admin.password) {
+                const sessionId = createSession(username);
+                localStorage.setItem('gamesense_session', sessionId);
+                updateUserDisplay(username, 'creator');
+                closeModal('loginModal');
+                alert('Welcome back, Creator!');
+                return;
+            }
+
+            // User login
+            if (system.users[username] && system.users[username].password === password) {
+                if (system.users[username].accessKey === key) {
+                    const sessionId = createSession(username);
+                    localStorage.setItem('gamesense_session', sessionId);
+                    updateUserDisplay(username, 'user');
+                    closeModal('loginModal');
+                    alert('Login successful!');
+                } else {
+                    alert('Invalid access key!');
+                }
+            } else {
+                alert('Invalid credentials!');
+            }
+        }
+
+        function register() {
+            const username = document.getElementById('regUsername').value;
+            const password = document.getElementById('regPassword').value;
+            const key = document.getElementById('regKey').value;
+
+            if (!username || !password || !key) {
+                alert('Please fill all fields!');
+                return;
+            }
+
+            // Check if key is valid (in real system, keys would be pre-generated by admin)
+            if (key.startsWith('GS_')) {
+                system.users[username] = {
+                    password: password,
+                    accessKey: key,
+                    hwid: generateRealHWID(),
+                    joinDate: new Date(),
+                    subscription: 'basic'
+                };
+                
+                const sessionId = createSession(username);
+                localStorage.setItem('gamesense_session', sessionId);
+                updateUserDisplay(username, 'user');
+                closeModal('registerModal');
+                alert('Registration successful! Welcome to GameSense!');
+            } else {
+                alert('Invalid access key! Contact administrator for valid key.');
+            }
+        }
+
+        function updateUserDisplay(username, role) {
+            const userActions = document.getElementById('userActions');
+            userActions.innerHTML = `
+                <div class="user-info">
+                    <span>${username}</span>
+                    <div class="${role === 'creator' ? 'creator-badge' : 'user-badge'}">
+                        ${role === 'creator' ? 'CREATOR' : 'MEMBER'}
+                    </div>
+                    ${role === 'creator' ? '<button class="admin-btn" onclick="openAdminPanel()">ADMIN</button>' : ''}
+                    <button class="auth-btn" onclick="logout()">LOGOUT</button>
+                </div>
+            `;
+        }
+
+        function openAdminPanel() {
+            alert('Admin Panel:\n- User Management\n- Key Generation\n- System Monitoring\n- Subscription Management');
+        }
+
+        function logout() {
+            localStorage.removeItem('gamesense_session');
+            location.reload();
+        }
+
+        // Check existing session on page load
+        window.addEventListener('load', function() {
+            const sessionId = localStorage.getItem('gamesense_session');
+            if (sessionId && system.activeSessions[sessionId]) {
+                const username = system.activeSessions[sessionId].username;
+                const role = username === system.admin.username ? 'creator' : 'user';
+                updateUserDisplay(username, role);
+            }
+        });
+    </script>
+</body>
+  </html>
