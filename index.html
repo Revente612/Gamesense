@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameSense.pub</title>
+    <style>
+        /* Все стили остаются такими же */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+        }
+
+        body {
+            background: #0f0f0f;
+            color: #d0d0d0;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .container {
+            width: 1300px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* ... остальные стили без изменений ... */
+    </style>
+</head>
+<body>
+    <!-- 2FA Modal -->
+    <div id="twofaModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-title">Two-Factor Authentication</div>
+            <div style="text-align: center; margin-bottom: 20px;">
+                <div style="color: #00ff00; font-size: 12px; margin-bottom: 10px;">
+                    Code sent to: <span id="userEmail"></span>
+                </div>
+                <div style="color: #888; font-size: 11px;">
+                    Check your email for the verification code
+                </div>
+            </div>
+            <div class="code-digits">
+                <input type="text" maxlength="1" class="code-digit" oninput="moveToNext(this, 1)">
+                <input type="text" maxlength="1" class="code-digit" oninput="moveToNext(this, 2)">
+                <input type="text" maxlength="1" class="code-digit" oninput="moveToNext(this, 3)">
+                <input type="text" maxlength="1" class="code-digit" oninput="moveToNext(this, 4)">
+                <input type="text" maxlength="1" class="code-digit" oninput="moveToNext(this, 5)">
+                <input type="text" maxlength="1" class="code-digit" oninput="moveToNext(this, 6)">
+            </div>
+            <div class="timer" id="twofaTimer">Code expires in: 30s</div>
+            <button class="submit-btn" onclick="verify2FA()" style="margin-top: 20px;">VERIFY</button>
+            <div id="twofaError" class="error-message" style="margin-top: 15px;"></div>
+        </div>
+    </div>
+
+    <!-- Purchase Key Modal -->
+    <div id="purchaseModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-title">Purchase Access Key</div>
+            <div style="text-align: center; margin-bottom: 20px;">
+                <div style="color: #ffa500; font-size: 14px; margin-bottom: 10px;">🔑 Premium Access Required</div>
+                <div style="color: #888; font-size: 12px;">
+                    To access all forum features, you need to purchase an access key.<br>
+                    Price: <strong style="color: #00ff00;">$29.99</strong>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>EMAIL</label>
+                <input type="email" id="purchaseEmail" placeholder="Enter your email for payment">
+            </div>
+            
+            <div class="form-group">
+                <label>PAYMENT METHOD</label>
+                <select id="paymentMethod" style="width: 100%; padding: 12px 15px; background: #252525; border: 1px solid #333; border-radius: 4px; color: #d0d0d0;">
+                    <option value="crypto">Bitcoin / Crypto</option>
+                    <option value="paypal">PayPal</option>
+                    <option value="card">Credit Card</option>
+                </select>
+            </div>
+            
+            <button class="submit-btn" onclick="processPayment()" style="background: #ffa500;">PURCHASE KEY</button>
+            <div id="purchaseError" class="error-message" style="margin-top: 15px;"></div>
+        </div>
+    </div>
+
+    <!-- Auth Section -->
+    <div id="authSection" class="auth-section">
+        <div class="auth-box">
+            <div class="auth-header">
+                <div class="logo-auth">
+                    <span class="logo-game">Game</span><span class="logo-sense">Sense</span>
+                </div>
+                <div class="auth-subtitle">Get good. Get GameSense.</div>
+            </div>
+
+            <div class="auth-tabs">
+                <div class="auth-tab active" onclick="showTab('login')">Login</div>
+                <div class="auth-tab" onclick="showTab('register')">Register</div>
+            </div>
+
+            <div id="loginForm">
+                <div class="form-group">
+                    <label>USERNAME</label>
+                    <input type="text" id="loginUsername" placeholder="Enter your username">
+                </div>
+                <div class="form-group">
+                    <label>PASSWORD</label>
+                    <input type="password" id="loginPassword" placeholder="Enter your password">
+                </div>
+                <button class="submit-btn" onclick="login()">LOGIN</button>
+                <div id="loginError" class="error-message"></div>
+            </div>
+
+            <div id="registerForm" style="display: none;">
+                <div class="form-group">
+                    <label>USERNAME</label>
+                    <input type="text" id="regUsername" placeholder="Choose a username">
+                </div>
+                <div class="form-group">
+                    <label>EMAIL</label>
+                    <input type="email" id="regEmail" placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label>PASSWORD</label>
+                    <input type="password" id="regPassword" placeholder="Create a password">
+                </div>
+                <button class="submit-btn" onclick="register()">REGISTER</button>
+                <div id="regError" class="error-message"></div>
+            </div>
+        </div>
+
+        <div class="info-message">
+            <strong>You do not have permission to view these forums.</strong><br>
+            You are not logged in.
+        </div>
+
+        <div class="footer">
+            GameSense 2025
+        </div>
+    </div>
+
+    <!-- Forum Section -->
+    <div id="forumSection" style="display: none;">
+        <!-- Header -->
+        <div class="header">
+            <div class="container">
+                <div class="header-content">
+                    <a href="#" class="logo" onclick="showSection('index')">
+                        <span class="logo-game">Game</span><span class="logo-sense">Sense</span>
+                    </a>
+                    <nav class="nav-main">
+                        <a href="#" class="active" onclick="showSection('index')">Index</a>
+                        <a href="#" onclick="showSection('threads')" id="threadsLink">Threads</a>
+                        <a href="#" onclick="showSection('create')" id="createLink">Create Post</a>
+                        <a href="#" onclick="showSection('profile')">Profile</a>
+                        <a href="#" onclick="showPurchaseModal()">Purchase Key</a>
+                    </nav>
+                    <div class="user-info" id="userInfo"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Premium Info -->
+        <div class="premium-info" id="premiumInfo" style="display: none;">
+            <div class="container">
+                <span class="premium-text">Logged in as <strong id="currentUser">user</strong></span><br>
+                <span class="premium-text">Premium (Counter-Strike: Global Offensive) until 02-01-2918 21:10:32</span>
+                <a href="#" class="discord-link">Join us on discord</a>
+                <a href="#" class="discord-link">Common issues</a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="container">
+            <div class="main-layout">
+                <!-- Left Column -->
+                <div>
+                    <!-- Locked Content Message -->
+                    <div id="lockedContent" style="display: none;">
+                        <div class="section">
+                            <div class="section-header">🔒 Premium Access Required</div>
+                            <div class="section-content" style="text-align: center; padding: 40px;">
+                                <div style="color: #ffa500; font-size: 48px; margin-bottom: 20px;">🔑</div>
+                                <div style="color: #00ff00; font-size: 18px; font-weight: 700; margin-bottom: 15px;">
+                                    Purchase Access Key to Unlock All Features
+                                </div>
+                                <div style="color: #888; font-size: 14px; margin-bottom: 30px;">
+                                    You need a valid access key to view threads, create posts, and access premium content.
+                                </div>
+                                <button class="submit-btn" onclick="showPurchaseModal()" style="background: #ffa500; width: auto; padding: 12px 30px;">
+                                    PURCHASE ACCESS KEY - $29.99
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Index Section -->
+                    <div id="indexSection">
+                        <div class="section">
+                            <div class="section-header">Announcement</div>
+                            <div class="section-content">
+                                As soon as everything is finished, we will probably sell that script.
+                                <br>--- To-do:
+                                <ul class="todo-list">
+                                    <li>fix chat's emoji.</li>
+                                    <li>add discord id reset for users & admin's control panel.</li>
+                                    <li>add hwd reset for users & admin's control panel.</li>
+                                    <li>add download button.</li>
+                                    <li>add api for loaders.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Forum stats visible to all -->
+                        <div class="section">
+                            <div class="section-header">General</div>
+                            <div class="section-content" style="padding: 0;">
+                                <table class="forums-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Forum</th>
+                                            <th>Topics</th>
+                                            <th>Posts</th>
+                                            <th>Last post</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><span class="forum-name">Announcements</span> <span class="new-posts">[ Premium ]</span></td>
+                                            <td id="announcementsCount">0</td>
+                                            <td id="announcementsPosts">0</td>
+                                            <td id="announcementsLast">Locked</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Stay up to date with the latest news</td>
+                                            <td id="newsCount">0</td>
+                                            <td id="newsPosts">0</td>
+                                            <td id="newsLast">Locked</td>
+                                        </tr>
+                                        <tr>
+                                            <td><span class="forum-name">General talk</span> <span class="new-posts">[ Premium ]</span></td>
+                                            <td id="generalCount">0</td>
+                                            <td id="generalPosts">0</td>
+                                            <td id="generalLast">Locked</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Threads Section (hidden without key) -->
+                    <div id="threadsSection" style="display: none;">
+                        <!-- Content will be loaded here if user has key -->
+                    </div>
+
+                    <!-- Create Post Section (hidden without key) -->
+                    <div id="createSection" style="display: none;">
+                        <!-- Content will be loaded here if user has key -->
+                    </div>
+
+                    <!-- Profile Section -->
+                    <div id="profileSection" style="display: none;">
+                        <div class="section">
+                            <div class="section-header">Profile</div>
+                            <div class="section-content">
+                                <div class="profile-info">
+                                    <div class="profile-item">
+                                        <div class="profile-label">Username</div>
+                                        <div class="profile-value" id="profileUsername"></div>
+                                    </div>
+                                    <div class="profile-item">
+                                        <div class="profile-label">Status</div>
+                                        <div class="profile-value">
+                                            <span id="profileStatus"></span>
+                                            <span class="hwid-status" id="statusBadge">FREE</span>
+                                        </div>
+                                    </div>
+                                    <div class="profile-item">
+                                        <div class="profile-label">Access Key</div>
+                                        <div class="profile-value" id="profileKey">Not purchased</div>
+                                    </div>
+                                    <div class="profile-item">
+                                        <div class="profile-label">Email</div>
+                                        <div class="profile-value" id="profileEmail"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Purchase Section -->
+                                <div class="twofa-section" id="purchaseSection">
+                                    <div class="twofa-title">🔑 Premium Access</div>
+                                    <div style="margin-bottom: 15px;">
+                                        <div style="color: #d0d0d0; font-size: 12px; margin-bottom: 8px;">
+                                            Current Status: <span id="currentStatus" style="color: #ff4444;">FREE USER</span>
+                                        </div>
+                                        <div style="color: #888; font-size: 11px;">
+                                            Purchase an access key to unlock all forum features including threads, posts, and premium content.
+                                        </div>
+                                    </div>
+                                    <button class="admin-btn" onclick="showPurchaseModal()" style="background: #ffa500;">Purchase Key - $29.99</button>
+                                </div>
+
+                                <!-- Key Management (for premium users) -->
+                                <div class="twofa-section" id="keyManagement" style="display: none;">
+                                    <div class="twofa-title">🔑 Access Key</div>
+                                    <div style="margin-bottom: 15px;">
+                                        <div style="color: #00ff00; font-size: 12px; margin-bottom: 8px;">
+                                            Your Access Key: <span id="userAccessKey" style="font-family: 'Consolas', monospace;"></span>
+                                        </div>
+                                        <div style="color: #888; font-size: 11px;">
+                                            Premium access active. All features unlocked.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column -->
+                <div>
+                    <div class="section">
+                        <div class="section-header">Chat</div>
+                        <div class="chat-messages" id="chatMessages">
+                            <div class="empty-message">Purchase access key to join chat</div>
+                        </div>
+                        <div class="chat-input-row">
+                            <input type="text" class="chat-input" id="chatInput" placeholder="Purchase key to chat..." disabled>
+                            <button class="chat-send" disabled>Send</button>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <div class="section-header">Online Users</div>
+                        <div class="section-content">
+                            <div class="online-users" id="onlineUsers">
+                                <span class="online-count">0 users online</span><br>
+                                <div id="onlineList"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // GameSense System with New Registration and Payment
+        class GameSenseForum {
+            constructor() {
+                this.users = JSON.parse(localStorage.getItem('gs_users')) || {
+                    'Monax': {
+                        password: 'Kzrhdf1992A_',
+                        email: 'admin@gamesense.com',
+                        role: 'admin',
+                        hasKey: true,
+                        accessKey: 'GS_ADMIN_001',
+                        premiumUntil: '02-01-2918 21:10:32'
+                    }
+                };
+                
+                this.accessKeys = JSON.parse(localStorage.getItem('gs_keys')) || {};
+                this.posts = JSON.parse(localStorage.getItem('gs_posts')) || [];
+                this.chatMessages = JSON.parse(localStorage.getItem('gs_chat')) || [];
+                this.onlineUsers = JSON.parse(localStorage.getItem('gs_online')) || {};
+                this.pendingPayments = JSON.parse(localStorage.getItem('gs_payments')) || {};
+                
+                this.currentUser = localStorage.getItem('gs_currentUser') || '';
+                this.twofaCode = null;
+                this.twofaExpires = null;
+            }
+
+            // НОВАЯ РЕГИСТРАЦИЯ БЕЗ КЛЮЧА
+            registerUser(username, email, password) {
+                if (this.users[username]) {
+                    return { success: false, message: 'Username already exists!' };
+                }
+
+                this.users[username] = { 
+                    password: password,
+                    email: email,
+                    role: 'user',
+                    hasKey: false,
+                    accessKey: null,
+                    premiumUntil: null,
+                    registeredAt: new Date().toISOString()
+                };
+                
+                this.saveData();
+                return { success: true, message: 'Registration successful!' };
+            }
+
+            // ПОКУПКА КЛЮЧА
+            purchaseKey(username, email, paymentMethod) {
+                const user = this.users[username];
+                if (!user) return { success: false, message: 'User not found' };
+                
+                if (user.hasKey) {
+                    return { success: false, message: 'User already has access key' };
+                }
+
+                // Генерируем уникальный ключ
+                const key = 'GS_' + Math.random().toString(36).substr(2, 8).toUpperCase() + '_' + 
+                           Math.random().toString(36).substr(2, 4).toUpperCase();
+                
+                // Обновляем пользователя
+                user.hasKey = true;
+                user.accessKey = key;
+                user.premiumUntil = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toLocaleDateString();
+                
+                // Сохраняем информацию о ключе
+                this.accessKeys[key] = {
+                    owner: username,
+                    purchasedAt: new Date().toISOString(),
+                    paymentMethod: paymentMethod,
+                    email: email
+                };
+
+                // Симулируем отправку ключа на почту
+                this.sendKeyEmail(email, key, username);
+                
+                this.saveData();
+                return { success: true, key: key, message: 'Access key purchased successfully!' };
+            }
+
+            // ОТПРАВКА КЛЮЧА НА ПОЧТУ
+            sendKeyEmail(email, key, username) {
+                const emailData = {
+                    to: email,
+                    from: 'GamesenseForumPubCrack@gmail.com',
+                    subject: 'Your GameSense Access Key',
+                    body: `
+Hello ${username},
+
+Thank you for your purchase! Here is your GameSense access key:
+
+🔑 ACCESS KEY: ${key}
+
+This key grants you full access to all GameSense forum features including:
+• Premium threads and discussions
+• File downloads and resources  
+• Private chat access
+• Exclusive content
+
+Keep this key safe and do not share it with anyone.
+
+Best regards,
+GameSense Team
+                    `
+                };
+                
+                // В реальной системе здесь был бы вызов email API
+                console.log('Sending email:', emailData);
+                alert(`Access key sent to: ${email}\n\nKey: ${key}\n\nCheck your email for details.`);
+            }
+
+            // 2FA С ОТПРАВКОЙ НА ПОЧТУ
+            generate2FACode(email) {
+                const code = Math.floor(100000 + Math.random() * 900000).toString();
+                this.twofaCode = code;
+                this.twofaExpires = Date.now() + 30000;
+
+                // Симулируем отправку кода на почту
+                this.send2FAEmail(email, code);
+                
+                return code;
+            }
+
+            send2FAEmail(email, code) {
+                const emailData = {
+                    to: email,
+                    from: 'GamesenseForumPubCrack@gmail.com',
+                    subject: 'GameSense - 2FA Verification Code',
+                    body: `
+Your GameSense verification code is:
+
+${code}
+
+This code will expire in 30 seconds.
+
+If you didn't request this code, please ignore this email.
+
+GameSense Team
+                    `
+                };
+                
+                console.log('Sending 2FA email:', emailData);
+                // В реальной системе здесь был бы вызов email API
+            }
+
+            verify2FACode(inputCode) {
+                if (!this.twofaCode || !this.twofaExpires) {
+                    return { success: false, message: 'No active 2FA code' };
+                }
+                
+                if (Date.now() > this.twofaExpires) {
+                    return { success: false, message: '2FA code expired' };
+                }
+                
+                if (inputCode !== this.twofaCode) {
+                    return { success: false, message: 'Invalid 2FA code' };
+                }
+                
+                this.twofaCode = null;
+                this.twofaExpires = null;
+                return { success: true, message: '2FA verification successful' };
+            }
+
+            // АВТОРИЗАЦИЯ
+            loginUser(username, password) {
+                const user = this.users[username];
+                if (!user || user.password !== password) {
+                    return { success: false, message: 'Invalid credentials!' };
+                }
+
+                return { 
+                    success: true, 
+                    user: user,
+                    requires2FA: true
+                };
+            }
+
+            // ОСТАЛЬНЫЕ МЕТОДЫ
+            saveData() {
+                localStorage.setItem('gs_users', JSON.stringify(this.users));
+                localStorage.setItem('gs_keys', JSON.stringify(this.accessKeys));
+                localStorage.setItem('gs_posts', JSON.stringify(this.posts));
+                localStorage.setItem('gs_chat', JSON.stringify(this.chatMessages));
+                localStorage.setItem('gs_online', JSON.stringify(this.onlineUsers));
+                localStorage.setItem('gs_payments', JSON.stringify(this.pendingPayments));
+                localStorage.setItem('gs_currentUser', this.currentUser);
+            }
+
+            updateUIForUser(user) {
+                // Показываем/скрываем элементы в зависимости от наличия ключа
+                const hasKey = user.hasKey;
+                
+                document.getElementById('premiumInfo').style.display = hasKey ? 'block' : 'none';
+                document.getElementById('lockedContent').style.display = hasKey ? 'none' : 'block';
+                document.getElementById('purchaseSection').style.display = hasKey ? 'none' : 'block';
+                document.getElementById('keyManagement').style.display = hasKey ? 'block' : 'none';
+                
+                // Обновляем навигацию
+                document.getElementById('threadsLink').style.display = hasKey ? 'inline' : 'none';
+                document.getElementById('createLink').style.display = hasKey ? 'inline' : 'none';
+                
+                if (hasKey) {
+                    document.getElementById('userAccessKey').textContent = user.accessKey;
+                    document.getElementById('statusBadge').className = 'hwid-status hwid-verified';
+                    document.getElementById('statusBadge').textContent = 'PREMIUM';
+                    document.getElementById('currentStatus').textContent = 'PREMIUM USER';
+                    document.getElementById('currentStatus').style.color = '#00ff00';
+                    document.getElementById('profileKey').textContent = user.accessKey;
+                    
+                    // Разблокируем чат
+                    document.getElementById('chatInput').disabled = false;
+                    document.getElementById('chatInput').placeholder = 'Type a message...';
+                    document.querySelector('.chat-send').disabled = false;
+                } else {
+                    document.getElementById('statusBadge').className = 'hwid-status hwid-reset';
+                    document.getElementById('statusBadge').textContent = 'FREE';
+                    document.getElementById('currentStatus').textContent = 'FREE USER';
+                    document.getElementById('currentStatus').style.color = '#ff4444';
+                    document.getElementById('profileKey').textContent = 'Not purchased';
+                    
+                    // Блокируем чат
+                    document.getElementById('chatInput').disabled = true;
+                    document.querySelector('.chat-send').disabled = true;
+                }
+            }
+
+            showForum(username) {
+                this.currentUser = username;
+                const user = this.users[username];
+                
+                this.saveData();
+                
+                document.getElementById('authSection').style.display = 'none';
+                document.getElementById('forumSection').style.display = 'block';
+
+                document.getElementById('userInfo').innerHTML = `
+                    <span>${username}</span>
+                    ${user.hasKey ? '<div class="premium-badge">Premium</div>' : '<div class="premium-badge" style="background: #666;">Free</div>'}
+                    <button class="logout-btn" onclick="forum.logout()">Logout</button>
+                `;
+
+                document.getElementById('currentUser').textContent = username;
+                this.updateUIForUser(user);
+                this.loadProfile();
+            }
+
+            loadProfile() {
+                const user = this.users[this.currentUser];
+                if (!user) return;
+                
+                document.getElementById('profileUsername').textContent = this.currentUser;
+                document.getElementById('profileEmail').textContent = user.email;
+                document.getElementById('profileStatus').textContent = user.hasKey ? 'Premium' : 'Free';
+                
+                this.updateUIForUser(user);
+            }
+
+            logout() {
+                delete this.onlineUsers[this.currentUser];
+                this.currentUser = '';
+                this.saveData();
+                location.reload();
+            }
+        }
+
+        // Глобальные функции
+        const forum = new GameSenseForum();
+
+        function showTab(tab) {
+            document.getElementById('loginForm').style.display = tab === 'login' ? 'block' : 'none';
+            document.getElementById('registerForm').style.display = tab === 'register' ? 'block' : 'none';
+            
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        function login() {
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+            const errorDiv = document.getElementById('loginError');
+
+            if (!username || !password) {
+                errorDiv.textContent = 'Please fill all fields!';
+                return;
+            }
+
+            const result = forum.loginUser(username, password);
+            if (!result.success) {
+                errorDiv.textContent = result.message;
+                return;
+            }
+
+            // Показываем 2FA
+            show2FAModal(result.user.email);
+        }
+
+        function register() {
+            const username = document.getElementById('regUsername').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+            const errorDiv = document.getElementById('regError');
+
+            if (!username || !email || !password) {
+                errorDiv.textContent = 'Please fill all fields!';
+                return;
+            }
+
+            const result = forum.registerUser(username, email, password);
+            if (!result.success) {
+                errorDiv.textContent = result.message;
+                return;
+            }
+
+            errorDiv.style.color = '#00ff00';
+            errorDiv.textContent = result.message;
+            
+            // Переключаем на логин после успешной регистрации
+            setTimeout(() => showTab('login'), 2000);
+        }
+
+        function show2FAModal(email) {
+            forum.generate2FACode(email);
+            document.getElementById('twofaModal').style.display = 'block';
+            document.getElementById('userEmail').textContent = email;
+            start2FATimer();
+        }
+
+        function start2FATimer() {
+            let timeLeft = 30;
+            const timer = document.getElementById('twofaTimer');
+            
+            const countdown = setInterval(() => {
+                timeLeft--;
+                timer.textContent = `Code expires in: ${timeLeft}s`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(countdown);
+                    document.getElementById('twofaError').textContent = '2FA code expired';
+                }
+            }, 1000);
+        }
+
+        function moveToNext(input, nextIndex) {
+            if (input.value.length === 1) {
+                const nextInput = input.parentElement.querySelector(`.code-digit:nth-child(${nextIndex + 1})`);
+                if (nextInput) {
+                    nextInput.focus();
+                }
+            }
+        }
+
+        function verify2FA() {
+            const digits = document.querySelectorAll('.code-digit');
+            let code = '';
+            digits.forEach(digit => code += digit.value);
+            
+            const result = forum.verify2FACode(code);
+            if (result.success) {
+                document.getElementById('twofaModal').style.display = 'none';
+                const username = document.getElementById('loginUsername').value;
+                forum.showForum(username);
+            } else {
+                document.getElementById('twofaError').textContent = result.message;
+            }
+        }
+
+        function showPurchaseModal() {
+            document.getElementById('purchaseModal').style.display = 'block';
+        }
+
+        function processPayment() {
+            const email = document.getElementById('purchaseEmail').value;
+            const paymentMethod = document.getElementById('paymentMethod').value;
+            const errorDiv = document.getElementById('purchaseError');
+
+            if (!email) {
+                errorDiv.textContent = 'Please enter your email!';
+                return;
+            }
+
+            const result = forum.purchaseKey(forum.currentUser, email, paymentMethod);
+            if (result.success) {
+                alert(`Payment successful!\n\nYour access key: ${result.key}\n\nKey has been sent to: ${email}`);
+                document.getElementById('purchaseModal').style.display = 'none';
+                forum.loadProfile();
+            } else {
+                errorDiv.textContent = result.message;
+            }
+        }
+
+        function showSection(section) {
+            const user = forum.users[forum.currentUser];
+            if (!user.hasKey && (section === 'threads' || section === 'create')) {
+                forum.showSection('profile');
+                alert('Purchase access key to unlock this feature!');
+                return;
+            }
+
+            document.querySelectorAll('.nav-main a').forEach(a => a.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            document.getElementById('indexSection').style.display = 'none';
+            document.getElementById('threadsSection').style.display = 'none';
+            document.getElementById('createSection').style.display = 'none';
+            document.getElementById('profileSection').style.display = 'none';
+            document.getElementById('lockedContent').style.display = 'none';
+            
+            document.getElementById(section + 'Section').style.display = 'block';
+            
+            if (section === 'profile') {
+                forum.loadProfile();
+            }
+        }
+
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', function() {
+            if (forum.currentUser) {
+                forum.showForum(forum.currentUser);
+            }
+        });
+    </script>
+</body>
+  </html>
